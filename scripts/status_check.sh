@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# 服务状态检查 → status.json（部署到服务器 /opt/homepage-status/，cron 每 5 分钟）
+set -u
+OUT="${OUT:-/opt/1panel/www/sites/home.roybase.top/data/status.json}"
+TMP="$(mktemp)"
+{
+  echo "{"
+  first=1
+  check() { # $1=key $2=name $3=url(或 ping:IP)
+    local status code
+    if [[ "$3" == ping:* ]]; then
+      ping -c1 -W2 "${3#ping:}" >/dev/null 2>&1 && status=up || status=down
+    else
+      # --noproxy "*"：服务器 env 有 http_proxy=127.0.0.1:2080（Lucky），走代理会超时返回 000 误判离线
+      code=$(curl -sk --noproxy "*" -o /dev/null -w '%{http_code}' --max-time 6 "$3" 2>/dev/null || true)
+      [[ "$code" =~ ^[0-9]{3}$ && "$code" != "000" ]] && status=up || status=down
+    fi
+    [ "$first" -eq 1 ] || echo ","
+    first=0
+    printf '"%s":{"name":"%s","url":"%s","status":"%s"}' "$1" "$2" "$3" "$status"
+  }
+  check 1panel      "1Panel"        "https://1p.roybase.top"
+  check 1panel-aipc "1Panel (aipc)" "https://www.roybase.com"
+  check nas         "NAS"           "ping:100.88.88.2"
+  check siyuan      "SiYuan"        "https://siyuan.roybase.com"
+  check itools      "IT Tools"      "https://itools.roybase.com"
+  check lxc         "Linux Command" "https://lxc.roybase.com"
+  check apf         "FreeLLMAPI"    "https://apf.roybase.com"
+  check sou         "Hermes Search" "https://sou.roybase.com"
+  check dsh         "DSH"           "https://dsh.roybase.top"
+  check dsh-aipc    "DSH (aipc)"    "https://dsh.roybase.com"
+  check lc          "llama.cpp"     "https://lc.roybase.com"
+  check dpan        "dPanel"        "https://dpan.roybase.com"
+  check hm          "Hermes Agent"  "https://hm.roybase.com"
+  check claw        "OpenClaw"      "https://claw.roybase.com"
+  check homebox     "Homebox"       "https://nas.roybase.com"
+  check bitwarden   "Bitwarden"     "https://tw.roybase.top"
+  check lucky       "Lucky"         "https://lucky.roybase.com"
+  echo ""
+  echo "}"
+} > "$TMP"
+mv "$TMP" "$OUT"

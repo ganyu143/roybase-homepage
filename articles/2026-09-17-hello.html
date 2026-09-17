@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>你好，这是新主页 · roybase</title>
+  <meta name="description" content="个人主页上线：自托管服务枢纽、导航工具、日志与收藏，纯 HTML/CSS/JS 零依赖。">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0e14'/%3E%3Cpath d='M18 22l14 10-14 10' stroke='%236ee7ff' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='36' y='42' width='12' height='6' fill='%23ffb86b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <main>
+  <div class="article-page">
+    <article>
+      <h1>你好，这是新主页</h1>
+      <p class="article-meta">2026-09-17 · roy</p>
+      <div class="article-body">
+        <p>之前 www.roybase.top 挂的是 Dashy 仪表盘——能用，但每次打开都像在看机房状态页，不像自己的东西。所以换了域名，把这个主页重新写了一遍：首屏是自我介绍和实时时钟，往下是服务枢纽、导航工具、日志和收藏，一个页面看全。</p>
+        <p>技术上是纯 HTML/CSS/JS，零构建零依赖，没有框架也没有 CDN——字体走系统栈，图标是内联 SVG。状态灯由服务器上的 cron 每 5 分钟 curl/ping 一次各个服务生成 <code>status.json</code>，页面同域读取，天然没有跨域问题；访问计数走 openresty 的 lua 模块，直接读写一个文本文件。</p>
+        <p>后面会持续加日志：折腾记录、踩坑复盘、折腾 NAS 和 AI PC 的东西。每篇就是一个 HTML 文件，列表里加一行，不需要生成器。</p>
+      </div>
+      <a class="back-link" href="/">&larr; 返回首页</a>
+    </article>
+  </div>
+  </main>
+</body>
+</html>
