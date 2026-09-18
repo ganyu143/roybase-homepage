@@ -12,7 +12,7 @@
   <meta property="og:url" content="https://www.roybase.top/">
   <link rel="canonical" href="https://www.roybase.top/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0e14'/%3E%3Cpath d='M18 22l14 10-14 10' stroke='%236ee7ff' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='36' y='42' width='12' height='6' fill='%23ffb86b'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/css/style.css?v=4">
+  <link rel="stylesheet" href="/css/style.css?v=5">
 </head>
 <body>
 
@@ -59,13 +59,22 @@
           <span class="terminal-title">roy@roybase: ~</span>
         </div>
         <div class="terminal-body">
-          <p class="prompt-line">
-            <span class="prompt">roy@roybase:~$</span> <span id="typewriter"></span><span class="cursor" id="cursor"></span>
-          </p>
+          <div class="hero-copy">
+            <p class="prompt-line">
+              <span class="prompt">roy@roybase:~$</span> <span id="typewriter"></span><span class="cursor" id="cursor"></span>
+            </p>
+            <p class="random-dialogue" id="random-dialogue" aria-live="polite">// 正在连接 roybase…</p>
+          </div>
           <div class="hero-cards">
             <div class="card" id="clock-card">
               <span class="card-label">Local Time</span>
               <span id="clock" class="mono">--:--:--</span>
+            </div>
+            <div class="card" id="calendar-card">
+              <span class="card-label">今日 · 皇历</span>
+              <span id="calendar-gregorian" class="mono">--</span>
+              <span id="calendar" class="calendar-lunar mono">--</span>
+              <span id="huangli" class="calendar-note">宜：自托管　忌：拖延</span>
             </div>
             <div class="card" id="weather-card">
               <span class="card-label">Jingzhou · 荆州</span>
@@ -342,6 +351,9 @@
             <span class="stat-value" id="stat-visits">--</span>
             <span class="stat-label">Visits</span>
           </div>
+          <div class="card stat-card visitor-card"><span class="stat-value" id="visitor-ip">--</span><span class="stat-label">Visitor IP</span></div>
+          <div class="card stat-card visitor-card"><span class="stat-value stat-value-small" id="visitor-browser">--</span><span class="stat-label">Browser</span></div>
+          <div class="card stat-card visitor-card"><span class="stat-value stat-value-small" id="visitor-device">--</span><span class="stat-label">Device / Locale</span></div>
         </div>
       </div>
     </section>
@@ -352,6 +364,6 @@
     <p class="mono">© 2026 roy · <a href="https://www.roybase.top" style="color:inherit;">www.roybase.top</a></p>
   </footer>
 
-  <script type="module" src="/js/main.js?v=4"></script>
+  <script type="module" src="/js/main.js?v=5"></script>
 </body>
 </html>

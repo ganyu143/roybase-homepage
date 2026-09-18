@@ -40,7 +40,53 @@ if (typeof document !== "undefined") {
     setInterval(tick, 1000);
   }
 
-  // 2. 打字机
+  // 2. 随机对话：短句、问答和状态提示混合轮播。
+  const dialogue = document.getElementById("random-dialogue");
+  if (dialogue) {
+    const lines = [
+      "访客：今天也要把服务跑起来吗？",
+      "roy：先看状态灯，再决定要不要重启。",
+      "// self-hosted is a habit, not a slogan",
+      "访客：为什么还在折腾？",
+      "roy：因为可控，也因为好玩。",
+      "// no vendor lock · no midnight panic",
+      "访客：今天的宜忌是什么？",
+      "roy：宜提交，忌把 token 写进仓库。",
+    ];
+    let last = -1;
+    const rotateDialogue = () => {
+      let next;
+      do next = Math.floor(Math.random() * lines.length); while (next === last);
+      last = next;
+      dialogue.classList.remove("dialogue-in");
+      requestAnimationFrame(() => {
+        dialogue.textContent = lines[next];
+        dialogue.classList.add("dialogue-in");
+      });
+    };
+    rotateDialogue();
+    setInterval(rotateDialogue, 5200);
+  }
+  // 2b. 公历、农历与轻量皇历提示（浏览器原生 Intl，无外部依赖）。
+  const calendar = document.getElementById("calendar");
+  const gregorian = document.getElementById("calendar-gregorian");
+  const huangli = document.getElementById("huangli");
+  if (calendar) {
+    const now = new Date();
+    if (gregorian) gregorian.textContent = new Intl.DateTimeFormat("zh-CN", { dateStyle: "full" }).format(now);
+    calendar.textContent = new Intl.DateTimeFormat("zh-CN-u-ca-chinese", {
+      dateStyle: "full",
+    }).format(now);
+    const day = now.getDay();
+    const notes = [
+      ["整理服务清单", "冲动改配置"], ["阅读文档", "熬夜硬扛"],
+      ["写一点代码", "复制粘贴密钥"], ["更新备份", "跳过验证"],
+      ["发布文章", "忘记缓存"], ["清理日志", "忽略告警"], ["休息一下", "把周末当生产"],
+    ];
+    const [yi,ji] = notes[day];
+    if (huangli) huangli.textContent = `宜：${yi}　忌：${ji}`;
+  }
+  // 3. 打字机
   const tw = document.getElementById("typewriter");
   if (tw) {
     const full = 'echo "你好，我是 roy —— 把能自托管的都自托管了"';
@@ -53,7 +99,7 @@ if (typeof document !== "undefined") {
     setTimeout(step, 400);
   }
 
-  // 3. 天气
+  // 4. 天气
   const weather = document.getElementById("weather");
   const weatherCard = document.getElementById("weather-card");
   if (weather) {
@@ -66,7 +112,7 @@ if (typeof document !== "undefined") {
       .catch(() => weatherCard && weatherCard.remove());
   }
 
-  // 4. 服务状态灯
+  // 5. 服务状态灯
   const statusNote = document.getElementById("status-note");
   const loadStatus = () =>
     fetch("/data/status.json")
@@ -90,7 +136,7 @@ if (typeof document !== "undefined") {
   loadStatus();
   setInterval(loadStatus, 5 * 60 * 1000);
 
-  // 5. 统计信息
+  // 6. 统计信息
   const statUptime = document.getElementById("stat-uptime");
   const statLoad   = document.getElementById("stat-load");
   const statMem    = document.getElementById("stat-mem");
@@ -112,7 +158,22 @@ if (typeof document !== "undefined") {
       .catch(() => statVisits.closest(".stat-card").remove());
   }
 
-  // 6. 博客文章列表（RSS feed 动态渲染）
+  // 6b. 访客信息：IP 由同源 Nginx 脱敏，浏览器信息在本地读取。
+  const visitorIp = document.getElementById("visitor-ip");
+  const visitorBrowser = document.getElementById("visitor-browser");
+  const visitorDevice = document.getElementById("visitor-device");
+  if (visitorIp || visitorBrowser || visitorDevice) {
+    fetch("/api/visitor")
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((v) => { if (visitorIp) visitorIp.textContent = v.ip || "隐藏"; })
+      .catch(() => { if (visitorIp) visitorIp.textContent = "隐藏"; });
+    const ua = navigator.userAgent;
+    const browser = /Edg\//.test(ua) ? "Edge" : /Chrome\//.test(ua) ? "Chrome" : /Firefox\//.test(ua) ? "Firefox" : /Safari\//.test(ua) ? "Safari" : "Browser";
+    const device = /Mobi|Android/i.test(ua) ? "Mobile" : "Desktop";
+    if (visitorBrowser) visitorBrowser.textContent = browser;
+    if (visitorDevice) visitorDevice.textContent = `${device} · ${navigator.language || "--"}`;
+  }
+  // 7. 博客文章列表（RSS feed 动态渲染）
   const articleList = document.getElementById("article-list");
   if (articleList) {
     const loadArticles = () =>
@@ -141,7 +202,7 @@ if (typeof document !== "undefined") {
         });
     loadArticles();
   }
-  // 7. 分类切换：一次只展示一个内容视图，切换时重新触发入场动画。
+  // 8. 分类切换：一次只展示一个内容视图，切换时重新触发入场动画。
   const sections = [...document.querySelectorAll(".collapsible-section")];
   const setView = (section, open = true) => {
     for (const item of sections) {
@@ -182,7 +243,7 @@ if (typeof document !== "undefined") {
     });
   }
   document.querySelector('#topnav a[href="#hero"]')?.classList.add("active");
-  // 7. 入场动画
+  // 9. 入场动画
   const els = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver(
@@ -201,7 +262,7 @@ if (typeof document !== "undefined") {
     els.forEach((el) => el.classList.add("in"));
   }
 
-  // 8. 侧栏跑马灯
+  // 10. 侧栏跑马灯
   const ticker = document.getElementById("ticker-inner");
   if (ticker) {
     const messages = [
