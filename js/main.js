@@ -227,7 +227,7 @@ if (typeof document !== "undefined") {
     });
   }
   // 顶部导航是分类入口，不只是锚点：激活对应视图并更新选中态。
-  for (const link of document.querySelectorAll("#topnav a[href^="#"]")) {
+  for (const link of document.querySelectorAll('#topnav a[href^="#"]')) {
     link.addEventListener("click", (event) => {
       event.preventDefault();
       const id = link.getAttribute("href").slice(1);
