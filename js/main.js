@@ -112,7 +112,36 @@ if (typeof document !== "undefined") {
       .catch(() => statVisits.closest(".stat-card").remove());
   }
 
-  // 6. 折叠区块
+  // 6. 博客文章列表（RSS feed 动态渲染）
+  const articleList = document.getElementById("article-list");
+  if (articleList) {
+    const loadArticles = () =>
+      fetch("/api/blog")
+        .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+        .then((text) => {
+          const doc = new DOMParser().parseFromString(text, "text/xml");
+          const items = [...doc.querySelectorAll("item")].slice(0, 10);
+          const esc = (s) => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+          articleList.innerHTML = items.map((item) => {
+            const title = item.querySelector("title")?.textContent ?? "";
+            const link = (item.querySelector("link")?.textContent ?? "#").replace("http://127.0.0.1:9100","https://blog.roybase.top");
+            const dateStr = item.querySelector("pubDate")?.textContent ?? "";
+            const desc = (item.querySelector("description")?.textContent ?? "").replace(/<[^>]*>/g,"").slice(0,120);
+            const d = dateStr ? new Date(dateStr) : null;
+            const dateFmt = d ? d.toISOString().slice(0,10) : "";
+            return `<a class="card article-card" href="${esc(link)}" target="_blank" rel="noopener">
+              <h4>${esc(title)}</h4>
+              <span class="article-date mono">${dateFmt}</span>
+              <p>${esc(desc)}</p>
+            </a>`;
+          }).join("");
+        })
+        .catch(() => {
+          articleList.innerHTML = "<p style=\"opacity:0.5;font-family:var(--mono)\">// 文章列表不可达</p>";
+        });
+    loadArticles();
+  }
+  // 7. 折叠区块
   for (const btn of document.querySelectorAll(".section-toggle")) {
     btn.addEventListener("click", () => {
       const expanded = btn.getAttribute("aria-expanded") === "true";
