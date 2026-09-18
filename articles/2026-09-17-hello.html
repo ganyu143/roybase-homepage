@@ -9,19 +9,45 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <main>
-  <div class="article-page">
-    <article>
-      <h1>你好，这是新主页</h1>
-      <p class="article-meta">2026-09-17 · roy</p>
-      <div class="article-body">
-        <p>之前 www.roybase.top 挂的是 Dashy 仪表盘——能用，但每次打开都像在看机房状态页，不像自己的东西。所以换了域名，把这个主页重新写了一遍：首屏是自我介绍和实时时钟，往下是服务枢纽、导航工具、日志和收藏，一个页面看全。</p>
-        <p>技术上是纯 HTML/CSS/JS，零构建零依赖，没有框架也没有 CDN——字体走系统栈，图标是内联 SVG。状态灯由服务器上的 cron 每 5 分钟 curl/ping 一次各个服务生成 <code>status.json</code>，页面同域读取，天然没有跨域问题；访问计数走 openresty 的 lua 模块，直接读写一个文本文件。</p>
-        <p>后面会持续加日志：折腾记录、踩坑复盘、折腾 NAS 和 AI PC 的东西。每篇就是一个 HTML 文件，列表里加一行，不需要生成器。</p>
+  <nav id="sidebar">
+    <div class="sidebar-inner">
+      <span class="sidebar-brand"><b>roy</b>@roybase</span>
+      <div class="sidebar-links">
+        <a href="/" title="首页">首页</a>
+        <a href="/#services" title="服务">服务</a>
+        <a href="/#tools" title="工具">工具</a>
+        <a href="/#articles" title="日志">日志</a>
+        <a href="/#bookmarks" title="收藏">收藏</a>
+        <a href="/#stats" title="统计">统计</a>
       </div>
-      <a class="back-link" href="/">&larr; 返回首页</a>
-    </article>
-  </div>
+    </div>
+  </nav>
+  <nav id="topnav">
+    <div class="nav-inner">
+      <span class="brand"><b>roy</b>@roybase:~$</span>
+      <div class="nav-links">
+        <a href="/">首页</a>
+        <a href="/#services">服务</a>
+        <a href="/#tools">工具</a>
+        <a href="/#articles">日志</a>
+        <a href="/#bookmarks">收藏</a>
+        <a href="/#stats">统计</a>
+      </div>
+    </div>
+  </nav>
+  <main class="container">
+    <div class="article-page">
+      <article>
+        <h1>你好，这是新主页</h1>
+        <p class="article-meta">2026-09-17 · roy</p>
+        <div class="article-body">
+          <p>之前 www.roybase.top 挂的是 Dashy 仪表盘——能用，但每次打开都像在看机房状态页，不像自己的东西。所以换了域名，把这个主页重新写了一遍：首屏是自我介绍和实时时钟，往下是服务枢纽、导航工具、日志与收藏。</p>
+          <p>技术上是纯 HTML/CSS/JS，零构建零依赖，没有框架也没有 CDN——字体走系统栈，图标是内联 SVG。状态灯由服务器上的 cron 每 5 分钟 curl/ping 一次各个服务生成 <code>status.json</code>，前端 5 分钟重取一次。</p>
+          <p>后面会持续加日志：折腾记录、踩坑复盘、折腾 NAS 和 AI PC 的东西。每篇就是一个 HTML 文件，列表里加一行，不需要生成器。</p>
+        </div>
+        <a class="back-link" href="/">&larr; 返回首页</a>
+      </article>
+    </div>
   </main>
 </body>
 </html>

@@ -153,6 +153,7 @@ if (typeof document !== "undefined") {
       "no vendor lock",
     ];
     // 双份拼接实现无缝循环
-    ticker.textContent = messages.concat(messages).join("  ·  ");
+    const all = messages.concat(messages);
+    ticker.innerHTML = all.map(m => `<div>${m}</div>`).join("");
   }
 }

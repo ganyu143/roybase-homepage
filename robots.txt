@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /data/
+Disallow: /scripts/
+
+Sitemap: https://www.roybase.top/sitemap.xml

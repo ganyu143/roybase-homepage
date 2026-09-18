@@ -3,3 +3,4 @@
 #   status.json    <- /opt/homepage-status/status_check.sh（cron 每 5 分钟）
 #   stats.json     <- /opt/homepage-status/stats_check.sh（cron 每 10 分钟）
 data/
+*.bak-*

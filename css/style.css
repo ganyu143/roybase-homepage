@@ -91,9 +91,15 @@ a:hover { text-decoration: underline; }
 }
 #sidebar .ticker-inner {
   font-family: var(--mono); font-size: 0.55rem;
-  color: var(--text-dim); white-space: nowrap;
+  color: var(--text-dim);
   animation: ticker 18s linear infinite;
   padding: 0 6px;
+}
+#sidebar .ticker-inner > div {
+  padding: 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 @keyframes ticker {
   from { transform: translateY(0); }
