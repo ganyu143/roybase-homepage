@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 服务器统计 → stats.json（部署到 /opt/homepage-status/，cron 每 10 分钟）
 set -u
-OUT="${OUT:-/opt/1panel/www/sites/home.roybase.top/data/stats.json}"
+OUT="${OUT:-/opt/1panel/www/sites/roybase-homepage/index/data/stats.json}"
 uptime_sec=$(awk '{print int($1)}' /proc/uptime)
 load=$(cut -d' ' -f1 /proc/loadavg)
 mem_total=$(awk '/MemTotal/{print $2}' /proc/meminfo)

@@ -124,7 +124,7 @@ if (typeof document !== "undefined") {
           const esc = (s) => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
           articleList.innerHTML = items.map((item) => {
             const title = item.querySelector("title")?.textContent ?? "";
-            const link = (item.querySelector("link")?.textContent ?? "#").replace("http://127.0.0.1:9100","https://blog.roybase.top");
+            const link = (item.querySelector("link")?.textContent ?? "#").replace("http://127.0.0.1:9100","https://blog.roybase.top").replace("https://www.roybase.top/index.php/archives/","https://blog.roybase.top/index.php/archives/");
             const dateStr = item.querySelector("pubDate")?.textContent ?? "";
             const desc = (item.querySelector("description")?.textContent ?? "").replace(/<[^>]*>/g,"").slice(0,120);
             const d = dateStr ? new Date(dateStr) : null;
@@ -151,6 +151,14 @@ if (typeof document !== "undefined") {
     });
   }
 
+  // 顶部导航：定位到区块时自动展开，保持单页入口可用。
+  for (const link of document.querySelectorAll("#topnav a[href^=\"#\"]")) {
+    link.addEventListener("click", () => {
+      const section = document.getElementById(link.getAttribute("href").slice(1));
+      const toggle = section?.querySelector(".section-toggle");
+      if (toggle?.getAttribute("aria-expanded") !== "true") toggle?.click();
+    });
+  }
   // 7. 入场动画
   const els = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {

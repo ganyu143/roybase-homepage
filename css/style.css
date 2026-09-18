@@ -346,3 +346,62 @@ footer a:hover { color: var(--accent); }
   .ticker-inner { animation: none; }
   .section-toggle .toggle-icon { transition: none; }
 }
+
+/* ============ Bruce-inspired layout refresh ============
+   Keep the existing roybase palette and content; refresh the shell and spacing. */
+body { padding-left: 0; }
+#sidebar { display: none; }
+#topnav {
+  display: block;
+  position: sticky;
+  top: 0;
+  background: rgba(10, 14, 20, 0.94);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+}
+#topnav .nav-inner { max-width: 1120px; height: 56px; padding: 0 24px; }
+#topnav .brand { font-size: .92rem; letter-spacing: .02em; }
+#topnav .nav-links { gap: 2px; }
+#topnav .nav-links a { padding: 7px 12px; border: 1px solid transparent; }
+#topnav .nav-links a:hover { border-color: var(--border); }
+.container { max-width: 1120px; padding: 0 24px; }
+#hero { min-height: min(620px, calc(100vh - 56px)); padding: 72px 0 54px; display: flex; align-items: center; }
+#hero .terminal { width: 100%; box-shadow: 0 28px 80px rgba(0,0,0,.38); }
+#hero .terminal-body { min-height: 360px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr); gap: 36px; align-content: center; padding: 52px clamp(24px, 7vw, 88px); }
+#hero .prompt-line { align-self: center; font-size: clamp(1.15rem, 2.7vw, 2rem); line-height: 1.5; }
+#hero .hero-cards { align-self: center; grid-template-columns: 1fr; gap: 12px; }
+#hero .hero-cards .card { padding: 22px; border-color: rgba(110,231,255,.22); }
+#hero .card-label { letter-spacing: .16em; }
+.collapsible-section { border: 1px solid var(--border); border-radius: var(--radius); margin: 18px 0; background: rgba(17,23,34,.58); overflow: hidden; }
+.section-toggle { padding: 22px 24px; }
+.section-toggle:hover { background: rgba(110,231,255,.035); }
+.section-toggle .section-head { display: grid; grid-template-columns: auto 1fr; column-gap: 16px; align-items: baseline; }
+.section-toggle .eyebrow { grid-row: span 2; align-self: start; padding-top: 5px; }
+.section-toggle .section-head h2 { margin: 0; }
+.section-toggle .section-sub { display: block; grid-column: 2; }
+.toggle-icon { font-size: .8rem; }
+.section-content { padding: 0 24px 26px; }
+.service-group { margin: 8px 0 28px; }
+.service-group h3, .bm-group h3 { border-left: 3px solid var(--accent); padding-left: 10px; }
+.service-grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.service-card { min-height: 138px; display: flex !important; flex-direction: column; justify-content: center; }
+.link-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.link-row { padding: 14px 16px; border: 1px solid transparent; border-radius: var(--radius); }
+.article-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.article-card { min-height: 150px; }
+.stats-grid { gap: 12px; }
+footer { margin-top: 46px; }
+@media (max-width: 700px) {
+  #topnav .nav-inner { height: auto; min-height: 56px; padding: 9px 16px; align-items: flex-start; flex-wrap: wrap; }
+  #topnav .nav-links { width: 100%; margin-left: 0; overflow-x: auto; }
+  .container { padding: 0 16px; }
+  #hero { min-height: auto; padding: 34px 0 24px; }
+  #hero .terminal-body { min-height: 0; grid-template-columns: 1fr; gap: 24px; padding: 30px 20px; }
+  #hero .prompt-line { font-size: 1.05rem; }
+  .section-toggle { padding: 18px 16px; }
+  .section-content { padding: 0 16px 20px; }
+  .section-toggle .section-head { grid-template-columns: 1fr auto; }
+  .section-toggle .eyebrow { grid-row: auto; grid-column: 1 / -1; }
+  .section-toggle .section-sub { grid-column: 1; }
+  .link-grid, .article-list { grid-template-columns: 1fr; }
+}
