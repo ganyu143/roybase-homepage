@@ -141,24 +141,47 @@ if (typeof document !== "undefined") {
         });
     loadArticles();
   }
-  // 7. 折叠区块
+  // 7. 分类切换：一次只展示一个内容视图，切换时重新触发入场动画。
+  const sections = [...document.querySelectorAll(".collapsible-section")];
+  const setView = (section, open = true) => {
+    for (const item of sections) {
+      const toggle = item.querySelector(".section-toggle");
+      const panel = document.getElementById(toggle?.getAttribute("aria-controls"));
+      const active = open && item === section;
+      toggle?.setAttribute("aria-expanded", String(active));
+      if (panel) {
+        panel.hidden = !active;
+        if (active) {
+          panel.classList.remove("view-refresh");
+          requestAnimationFrame(() => panel.classList.add("view-refresh"));
+        }
+      }
+      item.classList.toggle("is-active", active);
+    }
+  };
   for (const btn of document.querySelectorAll(".section-toggle")) {
     btn.addEventListener("click", () => {
-      const expanded = btn.getAttribute("aria-expanded") === "true";
-      const panel = document.getElementById(btn.getAttribute("aria-controls"));
-      btn.setAttribute("aria-expanded", String(!expanded));
-      if (panel) panel.hidden = expanded;
+      const section = btn.closest(".collapsible-section");
+      setView(section, btn.getAttribute("aria-expanded") !== "true");
     });
   }
-
-  // 顶部导航：定位到区块时自动展开，保持单页入口可用。
-  for (const link of document.querySelectorAll("#topnav a[href^=\"#\"]")) {
-    link.addEventListener("click", () => {
-      const section = document.getElementById(link.getAttribute("href").slice(1));
-      const toggle = section?.querySelector(".section-toggle");
-      if (toggle?.getAttribute("aria-expanded") !== "true") toggle?.click();
+  // 顶部导航是分类入口，不只是锚点：激活对应视图并更新选中态。
+  for (const link of document.querySelectorAll("#topnav a[href^="#"]")) {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const id = link.getAttribute("href").slice(1);
+      const section = document.getElementById(id);
+      document.querySelectorAll("#topnav a").forEach((item) => item.classList.toggle("active", item === link));
+      if (id === "hero") {
+        setView(null, false);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else if (section) {
+        setView(section, true);
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     });
   }
+  document.querySelector('#topnav a[href="#hero"]')?.classList.add("active");
   // 7. 入场动画
   const els = document.querySelectorAll(".reveal");
   if ("IntersectionObserver" in window) {
