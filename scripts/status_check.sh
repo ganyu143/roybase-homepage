@@ -20,6 +20,7 @@ TMP="$(mktemp)"
     printf '"%s":{"name":"%s","url":"%s","status":"%s"}' "$1" "$2" "$3" "$status"
   }
   check 1panel      "1Panel"        "https://1p.roybase.top"
+  check term        "Web Terminal"  "https://term.roybase.top"
   check 1panel-aipc "1Panel (aipc)" "https://www.roybase.com"
   check nas         "NAS"           "ping:100.88.88.2"
   check siyuan      "SiYuan"        "https://siyuan.roybase.com"
