@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>roybase · 个人主页</title>
+  <meta name="description" content="roy 的个人主页：自托管服务、工具导航、日志与收藏">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0e14'/%3E%3Cpath d='M18 22l14 10-14 10' stroke='%236ee7ff' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='36' y='42' width='12' height='6' fill='%23ffb86b'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav id="topnav">
+    <div class="nav-inner">
+      <span class="brand"><b>roy</b>@roybase:~$</span>
+      <div class="nav-links">
+        <a href="#hero">首页</a>
+        <a href="#services">服务</a>
+        <a href="#tools">工具</a>
+        <a href="#articles">日志</a>
+        <a href="#bookmarks">收藏</a>
+        <a href="#stats">统计</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- 首屏：终端风介绍 + 时钟 + 天气 -->
+    <section id="hero">
+      <h1 class="sr-only">roybase · roy 的个人主页</h1>
+      <div class="terminal reveal">
+        <div class="terminal-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="terminal-title">roy@roybase: ~</span>
+        </div>
+        <div class="terminal-body">
+          <p class="prompt-line">
+            <span class="prompt">roy@roybase:~$</span> <span id="typewriter"></span><span class="cursor" id="cursor"></span>
+          </p>
+          <div class="hero-cards">
+            <div class="card" id="clock-card">
+              <span class="card-label">Local Time</span>
+              <span id="clock" class="mono">--:--:--</span>
+            </div>
+            <div class="card" id="weather-card">
+              <span class="card-label">Jingzhou · 荆州</span>
+              <span id="weather" class="mono">loading…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 服务枢纽：4 组 17 卡片（任务 3 填充） -->
+    <section id="services">
+      <div class="section-head reveal">
+        <span class="eyebrow">Self-hosted</span>
+        <h2>服务枢纽</h2>
+        <p class="section-sub">jdcloud + aipc + nas 三台机器上的自托管服务，状态灯每 5 分钟刷新</p>
+      </div>
+      <div id="service-groups">
+        <div class="service-group reveal">
+          <h3>Home Server · jdcloud</h3>
+          <div class="service-grid">
+            <a class="card service-card" href="https://1p.roybase.top" target="_blank" rel="noopener" data-key="1panel">
+              <span class="status-dot"></span><h4>1Panel</h4>
+              <p>服务器面板 · jdcloud</p>
+              <span class="svc-url">https://1p.roybase.top</span>
+            </a>
+            <a class="card service-card" href="https://www.roybase.com" target="_blank" rel="noopener" data-key="1panel-aipc">
+              <span class="status-dot"></span><h4>1Panel (aipc)</h4>
+              <p>服务器面板 · aipc</p>
+              <span class="svc-url">https://www.roybase.com</span>
+            </a>
+            <div class="card service-card" data-key="nas">
+              <span class="status-dot"></span><h4>NAS</h4>
+              <p>存储 · tailnet 内网直连</p>
+              <span class="svc-url">100.88.88.2</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-group reveal">
+          <h3>AI PC · aipc</h3>
+          <div class="service-grid">
+            <a class="card service-card" href="https://siyuan.roybase.com" target="_blank" rel="noopener" data-key="siyuan">
+              <span class="status-dot"></span><h4>SiYuan</h4>
+              <p>知识库笔记</p>
+              <span class="svc-url">https://siyuan.roybase.com</span>
+            </a>
+            <a class="card service-card" href="https://itools.roybase.com" target="_blank" rel="noopener" data-key="itools">
+              <span class="status-dot"></span><h4>IT Tools</h4>
+              <p>IT 工具导航</p>
+              <span class="svc-url">https://itools.roybase.com</span>
+            </a>
+            <a class="card service-card" href="https://lxc.roybase.com" target="_blank" rel="noopener" data-key="lxc">
+              <span class="status-dot"></span><h4>Linux Command</h4>
+              <p>命令速查</p>
+              <span class="svc-url">https://lxc.roybase.com</span>
+            </a>
+            <a class="card service-card" href="https://apf.roybase.com" target="_blank" rel="noopener" data-key="apf">
+              <span class="status-dot"></span><h4>FreeLLMAPI</h4>
+              <p>本地 LLM API 网关</p>
+              <span class="svc-url">https://apf.roybase.com</span>
+            </a>
+            <a class="card service-card" href="https://sou.roybase.com" target="_blank" rel="noopener" data-key="sou">
+              <span class="status-dot"></span><h4>Hermes Search</h4>
+              <p>搜索入口</p>
+              <span class="svc-url">https://sou.roybase.com</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="service-group reveal">
+          <h3>AI Tools</h3>
+          <div class="service-grid">
+            <a class="card service-card" href="https://dsh.roybase.top" target="_blank" rel="noopener" data-key="dsh">
+              <span class="status-dot"></span><h4>DSH</h4>
+              <p>工具面板 · jdcloud</p>
+              <span class="svc-url">https://dsh.roybase.top</span>
+            </a>
+            <a class="card service-card" href="https://dsh.roybase.com" target="_blank" rel="noopener" data-key="dsh-aipc">
+              <span class="status-dot"></span><h4>DSH (aipc)</h4>
+              <p>工具面板 · aipc</p>
+              <span class="svc-url">https://dsh.roybase.com</span>
+            </a>
+            <a class="card service-card" href="https://lc.roybase.com" target="_blank" rel="noopener" data-key="lc">
+              <span class="status-dot"></span><h4>llama.cpp</h4>
+              <p>本地大模型推理</p>
+              <span class="svc-url">https://lc.roybase.com</span>
+            </a>
+            <a class="card service-card" href="https://dpan.roybase.com" target="_blank" rel="noopener" data-key="dpan">
+              <span class="status-dot"></span><h4>dPanel</h4>
+              <p>网盘下载面板</p>
+              <span class="svc-url">https://dpan.roybase.com</span>
+            </a>
+            <a class="card service-card" href="https://hm.roybase.com" target="_blank" rel="noopener" data-key="hm">
+              <span class="status-dot"></span><h4>Hermes Agent</h4>
+              <p>AI Agent 面板</p>
+              <span class="svc-url">https://hm.roybase.com</span>
+            </a>
+            <a class="card service-card" href="https://claw.roybase.com" target="_blank" rel="noopener" data-key="claw">
+              <span class="status-dot"></span><h4>OpenClaw</h4>
+              <p>AI 编码助手面板</p>
+              <span class="svc-url">https://claw.roybase.com</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="service-group reveal">
+          <h3>Network</h3>
+          <div class="service-grid">
+            <a class="card service-card" href="https://nas.roybase.com" target="_blank" rel="noopener" data-key="homebox">
+              <span class="status-dot"></span><h4>Homebox</h4>
+              <p>NAS 服务入口</p>
+              <span class="svc-url">https://nas.roybase.com</span>
+            </a>
+            <a class="card service-card" href="https://tw.roybase.top" target="_blank" rel="noopener" data-key="bitwarden">
+              <span class="status-dot"></span><h4>Bitwarden</h4>
+              <p>密码管理器</p>
+              <span class="svc-url">https://tw.roybase.top</span>
+            </a>
+            <a class="card service-card" href="https://lucky.roybase.com" target="_blank" rel="noopener" data-key="lucky">
+              <span class="status-dot"></span><h4>Lucky</h4>
+              <p>反向代理/网络工具</p>
+              <span class="svc-url">https://lucky.roybase.com</span>
+            </a>
+          </div>
+        </div>
+        <p class="status-unknown-note" id="status-note" hidden></p>
+      </div>
+    </section>
+
+    <!-- 导航工具（任务 4 填充） -->
+    <section id="tools">
+      <div class="section-head reveal">
+        <span class="eyebrow">Toolbox</span>
+        <h2>导航工具</h2>
+        <p class="section-sub">常用的公开工具与搜索入口</p>
+      </div>
+      <div id="tool-list" class="reveal">
+        <div class="link-grid">
+          <div class="link-row"><a href="https://www.an2.net/zi/" target="_blank" rel="noopener">田字格字帖生成器</a><span class="link-note">打印字帖</span></div>
+          <div class="link-row"><a href="https://www.biaozhun.org/" target="_blank" rel="noopener">标准网</a><span class="link-note">国标查询下载</span></div>
+          <div class="link-row"><a href="http://www.gjw123.com/" target="_blank" rel="noopener">工具123</a><span class="link-note">免安装工具站</span></div>
+          <div class="link-row"><a href="https://www.bmcx.com/" target="_blank" rel="noopener">便民查询网</a><span class="link-note">生活查询</span></div>
+          <div class="link-row"><a href="https://sqlfiddle.com/" target="_blank" rel="noopener">SQL Fiddle</a><span class="link-note">SQL 在线环境</span></div>
+          <div class="link-row"><a href="https://msdn.itellyou.cn/" target="_blank" rel="noopener">MSDN, 我告诉你</a><span class="link-note">系统/软件镜像</span></div>
+          <div class="link-row"><a href="https://www.puresys.net/" target="_blank" rel="noopener">Puresys 纯净系统</a><span class="link-note">系统镜像</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 日志文章（任务 5 填充） -->
+    <section id="articles">
+      <div class="section-head reveal">
+        <span class="eyebrow">Log</span>
+        <h2>日志文章</h2>
+        <p class="section-sub">折腾记录与思考</p>
+      </div>
+      <div id="article-list" class="article-list reveal">
+        <a class="card article-card" href="/articles/2026-09-17-hello.html">
+          <h4>你好，这是新主页</h4>
+          <span class="article-date mono">2026-09-17</span>
+          <p>新主页上线：自托管服务枢纽、导航工具、日志与收藏，纯 HTML/CSS/JS 零构建零依赖。</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 收藏文章（任务 4 填充） -->
+    <section id="bookmarks">
+      <div class="section-head reveal">
+        <span class="eyebrow">Bookmarks</span>
+        <h2>收藏文章</h2>
+        <p class="section-sub">从书签里挑出来的，值得反复看的东西</p>
+      </div>
+      <div id="bookmark-groups" class="reveal">
+        <div class="bm-group">
+          <h3>编程与数据库</h3>
+          <div class="link-grid">
+            <div class="link-row"><a href="https://www.w3school.com.cn/python/index.asp" target="_blank" rel="noopener">Python 教程</a><span class="link-note">w3school</span></div>
+            <div class="link-row"><a href="https://www.runoob.com/sql/sql-intro.html" target="_blank" rel="noopener">SQL 简介</a><span class="link-note">菜鸟教程</span></div>
+            <div class="link-row"><a href="https://www.codewars.com/" target="_blank" rel="noopener">Codewars</a><span class="link-note">算法刷题</span></div>
+            <div class="link-row"><a href="https://www.twle.cn/" target="_blank" rel="noopener">简单教程，简单编程</a><span class="link-note">编程入门</span></div>
+            <div class="link-row"><a href="https://xuesql.cn/" target="_blank" rel="noopener">自学SQL网</a><span class="link-note">教程+练习</span></div>
+          </div>
+        </div>
+        <div class="bm-group">
+          <h3>AI 与人工智能</h3>
+          <div class="link-grid">
+            <div class="link-row"><a href="https://ai-bot.cn/" target="_blank" rel="noopener">AI 工具集 ai-bot.cn</a><span class="link-note">AI 导航</span></div>
+            <div class="link-row"><a href="https://www.modelscope.cn/home" target="_blank" rel="noopener">魔搭社区 ModelScope</a><span class="link-note">模型社区</span></div>
+            <div class="link-row"><a href="https://tongyi.aliyun.com/" target="_blank" rel="noopener">通义千问</a><span class="link-note">对话</span></div>
+            <div class="link-row"><a href="https://github.com/f/awesome-chatgpt-prompts" target="_blank" rel="noopener">awesome-chatgpt-prompts</a><span class="link-note">GitHub</span></div>
+          </div>
+        </div>
+        <div class="bm-group">
+          <h3>技术社区</h3>
+          <div class="link-grid">
+            <div class="link-row"><a href="https://www.cnblogs.com/" target="_blank" rel="noopener">博客园</a><span class="link-note">技术博客</span></div>
+            <div class="link-row"><a href="https://juejin.cn/" target="_blank" rel="noopener">稀土掘金</a><span class="link-note">技术社区</span></div>
+            <div class="link-row"><a href="https://daxiaamu.com/" target="_blank" rel="noopener">大侠阿木</a><span class="link-note">个人博客</span></div>
+          </div>
+        </div>
+        <div class="bm-group">
+          <h3>GitHub 项目</h3>
+          <div class="link-grid">
+            <div class="link-row"><a href="https://github.com/Asabeneh/30-Days-Of-Python" target="_blank" rel="noopener">30-Days-Of-Python</a><span class="link-note">Python 入门</span></div>
+            <div class="link-row"><a href="https://github.com/bee-san/RustScan" target="_blank" rel="noopener">RustScan</a><span class="link-note">端口扫描</span></div>
+            <div class="link-row"><a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a><span class="link-note">代码托管</span></div>
+          </div>
+        </div>
+        <div class="bm-group">
+          <h3>影视与娱乐</h3>
+          <div class="link-grid">
+            <div class="link-row"><a href="https://www.bilibili.com/" target="_blank" rel="noopener">哔哩哔哩</a><span class="link-note">视频</span></div>
+            <div class="link-row"><a href="https://www.hdarea.co/" target="_blank" rel="noopener">HDArea</a><span class="link-note">PT 站</span></div>
+            <div class="link-row"><a href="https://www.hitpt.com/" target="_blank" rel="noopener">百川PT</a><span class="link-note">PT 站</span></div>
+          </div>
+        </div>
+        <div class="bm-group">
+          <h3>NAS 与存储</h3>
+          <div class="link-grid">
+            <div class="link-row"><a href="https://wp.gxnas.com/" target="_blank" rel="noopener">GXNAS 博客</a><span class="link-note">群晖教程</span></div>
+            <div class="link-row"><a href="https://zhuanlan.zhihu.com/p/459751737" target="_blank" rel="noopener">群晖 ssh 命令清单大全</a><span class="link-note">命令速查</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 统计信息（任务 6 填充） -->
+    <section id="stats">
+      <div class="section-head reveal">
+        <span class="eyebrow">Metrics</span>
+        <h2>统计信息</h2>
+        <p class="section-sub">jdcloud 服务器实时状态与访问计数</p>
+      </div>
+      <div id="stats-grid" class="stats-grid reveal">
+        <div class="card stat-card">
+          <span class="stat-value" id="stat-uptime">--</span>
+          <span class="stat-label">Uptime</span>
+        </div>
+        <div class="card stat-card">
+          <span class="stat-value" id="stat-load">--</span>
+          <span class="stat-label">Load Avg</span>
+        </div>
+        <div class="card stat-card">
+          <span class="stat-value" id="stat-mem">--</span>
+          <span class="stat-label">Memory</span>
+        </div>
+        <div class="card stat-card">
+          <span class="stat-value" id="stat-visits">--</span>
+          <span class="stat-label">Visits</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><a href="https://beian.miit.gov.cn" target="_blank" rel="noopener">鄂ICP备2022014360号</a></p>
+    <p class="mono">© 2026 roy · home.roybase.top</p>
+  </footer>
+
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>
