@@ -12,7 +12,7 @@
   <meta property="og:url" content="https://www.roybase.top/">
   <link rel="canonical" href="https://www.roybase.top/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0e14'/%3E%3Cpath d='M18 22l14 10-14 10' stroke='%236ee7ff' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='36' y='42' width='12' height='6' fill='%23ffb86b'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/css/style.css?v=5">
+  <link rel="stylesheet" href="/css/style.css?v=6">
 </head>
 <body>
 
@@ -73,7 +73,7 @@
             <div class="card" id="calendar-card">
               <span class="card-label">今日 · 皇历</span>
               <span id="calendar-gregorian" class="mono">--</span>
-              <span id="calendar" class="calendar-lunar mono">--</span>
+              <span id="calendar" class="calendar-lunar">--</span>
               <span id="huangli" class="calendar-note">宜：自托管　忌：拖延</span>
             </div>
             <div class="card" id="weather-card">
@@ -115,11 +115,11 @@
                 <p>服务器面板 · aipc</p>
                 <span class="svc-url">https://www.roybase.com</span>
               </a>
-              <div class="card service-card" data-key="nas">
+              <a class="card service-card" href="https://nas.roybase.com" target="_blank" rel="noopener" data-key="homebox">
                 <span class="status-dot"></span><h4>NAS</h4>
-                <p>存储 · tailnet 内网直连</p>
-                <span class="svc-url">100.88.88.2</span>
-              </div>
+                <p>存储 · Homebox</p>
+                <span class="svc-url">https://nas.roybase.com</span>
+              </a>
             </div>
           </div>
 
@@ -167,11 +167,6 @@
                 <p>工具面板 · aipc</p>
                 <span class="svc-url">https://dsh.roybase.com</span>
               </a>
-              <a class="card service-card" href="https://lc.roybase.com" target="_blank" rel="noopener" data-key="lc">
-                <span class="status-dot"></span><h4>llama.cpp</h4>
-                <p>本地大模型推理</p>
-                <span class="svc-url">https://lc.roybase.com</span>
-              </a>
               <a class="card service-card" href="https://dpan.roybase.com" target="_blank" rel="noopener" data-key="dpan">
                 <span class="status-dot"></span><h4>dPanel</h4>
                 <p>网盘下载面板</p>
@@ -193,16 +188,6 @@
           <div class="service-group reveal">
             <h3>Network</h3>
             <div class="service-grid">
-              <a class="card service-card" href="https://nas.roybase.com" target="_blank" rel="noopener" data-key="homebox">
-                <span class="status-dot"></span><h4>Homebox</h4>
-                <p>NAS 服务入口</p>
-                <span class="svc-url">https://nas.roybase.com</span>
-              </a>
-              <a class="card service-card" href="https://tw.roybase.top" target="_blank" rel="noopener" data-key="bitwarden">
-                <span class="status-dot"></span><h4>Bitwarden</h4>
-                <p>密码管理器</p>
-                <span class="svc-url">https://tw.roybase.top</span>
-              </a>
               <a class="card service-card" href="https://lucky.roybase.com" target="_blank" rel="noopener" data-key="lucky">
                 <span class="status-dot"></span><h4>Lucky</h4>
                 <p>反向代理/网络工具</p>
@@ -251,8 +236,8 @@
         <span class="toggle-icon" aria-hidden="true">▶</span>
       </button>
       <div id="articles-content" class="section-content" hidden>
-        <div id="article-list" class="article-list reveal">
-          <!-- 文章卡片由 JS 从 /api/blog RSS feed 动态渲染 -->
+        <div id="article-list" class="article-tree reveal">
+          <!-- 文章树由 JS 从 /api/blog RSS feed 动态渲染（年→月→文章） -->
         </div>
       </div>
     </section>
@@ -268,57 +253,8 @@
         <span class="toggle-icon" aria-hidden="true">▶</span>
       </button>
       <div id="bookmarks-content" class="section-content" hidden>
-        <div id="bookmark-groups" class="reveal">
-          <div class="bm-group">
-            <h3>编程与数据库</h3>
-            <div class="link-grid">
-              <div class="link-row"><a href="https://www.w3school.com.cn/python/index.asp" target="_blank" rel="noopener">Python 教程</a><span class="link-note">w3school</span></div>
-              <div class="link-row"><a href="https://www.runoob.com/sql/sql-intro.html" target="_blank" rel="noopener">SQL 简介</a><span class="link-note">菜鸟教程</span></div>
-              <div class="link-row"><a href="https://www.codewars.com/" target="_blank" rel="noopener">Codewars</a><span class="link-note">算法刷题</span></div>
-              <div class="link-row"><a href="https://www.twle.cn/" target="_blank" rel="noopener">简单教程，简单编程</a><span class="link-note">编程入门</span></div>
-              <div class="link-row"><a href="https://xuesql.cn/" target="_blank" rel="noopener">自学SQL网</a><span class="link-note">教程+练习</span></div>
-            </div>
-          </div>
-          <div class="bm-group">
-            <h3>AI 与人工智能</h3>
-            <div class="link-grid">
-              <div class="link-row"><a href="https://ai-bot.cn/" target="_blank" rel="noopener">AI 工具集 ai-bot.cn</a><span class="link-note">AI 导航</span></div>
-              <div class="link-row"><a href="https://www.modelscope.cn/home" target="_blank" rel="noopener">魔搭社区 ModelScope</a><span class="link-note">模型社区</span></div>
-              <div class="link-row"><a href="https://tongyi.aliyun.com/" target="_blank" rel="noopener">通义千问</a><span class="link-note">对话</span></div>
-              <div class="link-row"><a href="https://github.com/f/awesome-chatgpt-prompts" target="_blank" rel="noopener">awesome-chatgpt-prompts</a><span class="link-note">GitHub</span></div>
-            </div>
-          </div>
-          <div class="bm-group">
-            <h3>技术社区</h3>
-            <div class="link-grid">
-              <div class="link-row"><a href="https://www.cnblogs.com/" target="_blank" rel="noopener">博客园</a><span class="link-note">技术博客</span></div>
-              <div class="link-row"><a href="https://juejin.cn/" target="_blank" rel="noopener">稀土掘金</a><span class="link-note">技术社区</span></div>
-              <div class="link-row"><a href="https://daxiaamu.com/" target="_blank" rel="noopener">大侠阿木</a><span class="link-note">个人博客</span></div>
-            </div>
-          </div>
-          <div class="bm-group">
-            <h3>GitHub 项目</h3>
-            <div class="link-grid">
-              <div class="link-row"><a href="https://github.com/Asabeneh/30-Days-Of-Python" target="_blank" rel="noopener">30-Days-Of-Python</a><span class="link-note">Python 入门</span></div>
-              <div class="link-row"><a href="https://github.com/bee-san/RustScan" target="_blank" rel="noopener">RustScan</a><span class="link-note">端口扫描</span></div>
-              <div class="link-row"><a href="https://gitee.com/" target="_blank" rel="noopener">Gitee</a><span class="link-note">代码托管</span></div>
-            </div>
-          </div>
-          <div class="bm-group">
-            <h3>影视与娱乐</h3>
-            <div class="link-grid">
-              <div class="link-row"><a href="https://www.bilibili.com/" target="_blank" rel="noopener">哔哩哔哩</a><span class="link-note">视频</span></div>
-              <div class="link-row"><a href="https://www.hdarea.co/" target="_blank" rel="noopener">HDArea</a><span class="link-note">PT 站</span></div>
-              <div class="link-row"><a href="https://www.hitpt.com/" target="_blank" rel="noopener">百川PT</a><span class="link-note">PT 站</span></div>
-            </div>
-          </div>
-          <div class="bm-group">
-            <h3>NAS 与存储</h3>
-            <div class="link-grid">
-              <div class="link-row"><a href="https://wp.gxnas.com/" target="_blank" rel="noopener">GXNAS 博客</a><span class="link-note">群晖教程</span></div>
-              <div class="link-row"><a href="https://zhuanlan.zhihu.com/p/459751737" target="_blank" rel="noopener">群晖 ssh 命令清单大全</a><span class="link-note">命令速查</span></div>
-            </div>
-          </div>
+        <div id="bookmark-tree" class="bookmark-tree reveal">
+          <!-- 收藏树由 JS 从内置 BOOKMARKS 数据渲染（分类→链接） -->
         </div>
       </div>
     </section>
@@ -334,26 +270,37 @@
         <span class="toggle-icon" aria-hidden="true">▶</span>
       </button>
       <div id="stats-content" class="section-content" hidden>
-        <div id="stats-grid" class="stats-grid reveal">
-          <div class="card stat-card">
-            <span class="stat-value" id="stat-uptime">--</span>
-            <span class="stat-label">Uptime</span>
+        <div id="stats-grid" class="stats-wrap reveal">
+          <div class="stats-group">
+            <div class="stats-subhead">服务器状态</div>
+            <div class="stats-grid">
+              <div class="card stat-card">
+                <span class="stat-value" id="stat-uptime">--</span>
+                <span class="stat-label">Uptime</span>
+              </div>
+              <div class="card stat-card">
+                <span class="stat-value" id="stat-load">--</span>
+                <span class="stat-label">Load Avg</span>
+              </div>
+              <div class="card stat-card">
+                <span class="stat-value" id="stat-mem">--</span>
+                <span class="stat-label">Memory</span>
+              </div>
+              <div class="card stat-card">
+                <span class="stat-value" id="stat-visits">--</span>
+                <span class="stat-label">Visits</span>
+              </div>
+            </div>
           </div>
-          <div class="card stat-card">
-            <span class="stat-value" id="stat-load">--</span>
-            <span class="stat-label">Load Avg</span>
+          <div class="stats-group">
+            <div class="stats-subhead">访客信息</div>
+            <div class="stats-grid">
+              <div class="card stat-card visitor-card"><span class="stat-value" id="visitor-ip">--</span><span class="stat-label">Visitor IP</span></div>
+              <div class="card stat-card visitor-card"><span class="stat-value" id="visitor-region">--</span><span class="stat-label">Region</span></div>
+              <div class="card stat-card visitor-card"><span class="stat-value stat-value-small" id="visitor-browser">--</span><span class="stat-label">Browser</span></div>
+              <div class="card stat-card visitor-card"><span class="stat-value stat-value-small" id="visitor-device">--</span><span class="stat-label">Device / Locale</span></div>
+            </div>
           </div>
-          <div class="card stat-card">
-            <span class="stat-value" id="stat-mem">--</span>
-            <span class="stat-label">Memory</span>
-          </div>
-          <div class="card stat-card">
-            <span class="stat-value" id="stat-visits">--</span>
-            <span class="stat-label">Visits</span>
-          </div>
-          <div class="card stat-card visitor-card"><span class="stat-value" id="visitor-ip">--</span><span class="stat-label">Visitor IP</span></div>
-          <div class="card stat-card visitor-card"><span class="stat-value stat-value-small" id="visitor-browser">--</span><span class="stat-label">Browser</span></div>
-          <div class="card stat-card visitor-card"><span class="stat-value stat-value-small" id="visitor-device">--</span><span class="stat-label">Device / Locale</span></div>
         </div>
       </div>
     </section>
@@ -361,9 +308,9 @@
 
   <footer>
     <p><a href="https://beian.miit.gov.cn" target="_blank" rel="noopener">鄂ICP备2022014360号</a></p>
-    <p class="mono">© 2026 roy · <a href="https://www.roybase.top" style="color:inherit;">www.roybase.top</a></p>
+    <p class="mono">© 2026 roy · <a href="https://www.roybase.top" style="color:inherit;">www.roybase.top</a> · 博客后台：<a href="https://blog.roybase.top/admin/" target="_blank" rel="noopener" style="color:inherit;">blog.roybase.top/admin</a></p>
   </footer>
 
-  <script type="module" src="/js/main.js?v=6"></script>
+  <script type="module" src="/js/main.js?v=7"></script>
 </body>
 </html>

@@ -52,6 +52,24 @@ if (typeof document !== "undefined") {
       "// no vendor lock · no midnight panic",
       "访客：今天的宜忌是什么？",
       "roy：宜提交，忌把 token 写进仓库。",
+      "// it works on my machine —— 因为我的机器就是服务器",
+      "roy：99 little problems a server can have…",
+      "// git push --force 之前，先 git pull",
+      "访客：服务器又挂了？",
+      "roy：没有，只是重启了一下。",
+      "// SELECT * FROM 生活 WHERE 计划 = '随便'",
+      "roy：备份是写给未来自己的一封情书。",
+      "// 404: 需求文档 not found",
+      "访客：为什么不用云？",
+      "roy：云就是别人的服务器。",
+      "// while(alive) { coffee(); code(); }",
+      "roy：最好的代码是没写的代码。",
+      "// TODO: 明天再重构（明天永远不会来）",
+      "访客：这个 bug 存在多久了？",
+      "roy：它不叫 bug，叫未文档化的特性。",
+      "// rm -rf 之前，先想三秒",
+      "roy：监控没报警，不代表没问题。",
+      "// 告警响了 30 次，第 31 次才是真的",
     ];
     let last = -1;
     const rotateDialogue = () => {
@@ -73,17 +91,28 @@ if (typeof document !== "undefined") {
   const huangli = document.getElementById("huangli");
   if (calendar) {
     const now = new Date();
-    if (gregorian) gregorian.textContent = new Intl.DateTimeFormat("zh-CN", { dateStyle: "full" }).format(now);
+    const week = "日一二三四五六"[now.getDay()];
+    if (gregorian) gregorian.textContent = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 周${week}`;
     calendar.textContent = new Intl.DateTimeFormat("zh-CN-u-ca-chinese", {
-      dateStyle: "full",
+      year: "numeric", month: "long", day: "numeric",
     }).format(now);
-    const day = now.getDay();
+    // 宜忌按日期轮换：年内第 N 天对文案池取模，每天不同
+    const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
     const notes = [
-      ["整理服务清单", "冲动改配置"], ["阅读文档", "熬夜硬扛"],
-      ["写一点代码", "复制粘贴密钥"], ["更新备份", "跳过验证"],
-      ["发布文章", "忘记缓存"], ["清理日志", "忽略告警"], ["休息一下", "把周末当生产"],
+      ["整理服务清单","冲动改配置"],["阅读文档","熬夜硬扛"],["写一点代码","复制粘贴密钥"],
+      ["更新备份","跳过验证"],["发布文章","忘记缓存"],["清理日志","忽略告警"],["休息一下","把周末当生产"],
+      ["提交代码","force push"],["写测试","跳过测试"],["升级系统","不读 changelog"],
+      ["检查证书","裸奔上线"],["备份数据库","只信口头承诺"],["整理书签","收藏吃灰"],
+      ["复盘事故","甩锅给运气"],["给服务加监控","裸奔跑生产"],["清理磁盘","rm -rf 一把梭"],
+      ["更新依赖","锁死旧版本"],["写 README","留白给后人"],["拆分脚本","面条式脚本"],
+      ["加索引","全表扫描"],["用事务","裸写 SQL"],["开事务","长事务锁表"],
+      ["压测一下","直接上生产"],["灰度发布","全量梭哈"],["看监控","凭感觉调参"],
+      ["写注释","注释与代码打架"],["重构","边跑边改"],["加日志","无日志排障"],
+      ["轮值巡检","告警疲劳"],["归档旧数据","无限增长"],["限流保护","裸奔扛流量"],
+      ["演练恢复","只备不演"],["更新密钥","密钥永不过期"],["收敛权限","全员 root"],
+      ["读一遍告警","告警当背景音"],["给备份做恢复演练","备份从没用过"],
     ];
-    const [yi,ji] = notes[day];
+    const [yi,ji] = notes[dayOfYear % notes.length];
     if (huangli) huangli.textContent = `宜：${yi}　忌：${ji}`;
   }
   // 3. 打字机
@@ -103,7 +132,8 @@ if (typeof document !== "undefined") {
   const weather = document.getElementById("weather");
   const weatherCard = document.getElementById("weather-card");
   if (weather) {
-    fetch("https://api.open-meteo.com/v1/forecast?latitude=30.35&longitude=112.24&current=temperature_2m,weather_code&timezone=Asia/Shanghai")
+    // 同源代理：服务器直连 open-meteo，国内访客浏览器不必直连外网
+    fetch("/api/weather")
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((j) => {
         const c = j.current;
@@ -158,49 +188,128 @@ if (typeof document !== "undefined") {
       .catch(() => statVisits.closest(".stat-card").remove());
   }
 
-  // 6b. 访客信息：IP 由同源 Nginx 脱敏，浏览器信息在本地读取。
+  // 6b. 访客信息：IP 由同源 Nginx 脱敏，地域由 ipwho.is（CORS 开放）解析，浏览器信息在本地读取。
   const visitorIp = document.getElementById("visitor-ip");
+  const visitorRegion = document.getElementById("visitor-region");
   const visitorBrowser = document.getElementById("visitor-browser");
   const visitorDevice = document.getElementById("visitor-device");
-  if (visitorIp || visitorBrowser || visitorDevice) {
+  if (visitorIp || visitorRegion || visitorBrowser || visitorDevice) {
     fetch("/api/visitor")
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((v) => { if (visitorIp) visitorIp.textContent = v.ip || "隐藏"; })
       .catch(() => { if (visitorIp) visitorIp.textContent = "隐藏"; });
+    // 地域：ipwho.is 免费无 key、CORS 开放；失败时显示“未知”不隐藏卡片
+    if (visitorRegion) {
+      visitorRegion.textContent = "解析中…";
+      fetch("https://ipwho.is/")
+        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+        .then((v) => {
+          if (!v.success) throw new Error("ipwho");
+          const country = { China: "中国", Japan: "日本", US: "美国", USA: "美国", Germany: "德国", UK: "英国", Singapore: "新加坡" }[v.country] || v.country;
+          visitorRegion.textContent = [v.city, country].filter(Boolean).join(" · ") || "未知";
+        })
+        .catch(() => { visitorRegion.textContent = "未知"; });
+    }
     const ua = navigator.userAgent;
     const browser = /Edg\//.test(ua) ? "Edge" : /Chrome\//.test(ua) ? "Chrome" : /Firefox\//.test(ua) ? "Firefox" : /Safari\//.test(ua) ? "Safari" : "Browser";
     const device = /Mobi|Android/i.test(ua) ? "Mobile" : "Desktop";
     if (visitorBrowser) visitorBrowser.textContent = browser;
     if (visitorDevice) visitorDevice.textContent = `${device} · ${navigator.language || "--"}`;
   }
-  // 7. 博客文章列表（RSS feed 动态渲染）
+  // 7. 博客文章列表：RSS feed → 文件树（年→月→文章，<details> 原生折叠）
   const articleList = document.getElementById("article-list");
   if (articleList) {
+    const pad2 = (n) => String(n).padStart(2, "0");
+    const esc = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     const loadArticles = () =>
       fetch("/api/blog")
         .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
         .then((text) => {
           const doc = new DOMParser().parseFromString(text, "text/xml");
-          const items = [...doc.querySelectorAll("item")].slice(0, 10);
-          const esc = (s) => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-          articleList.innerHTML = items.map((item) => {
+          const items = [...doc.querySelectorAll("item")].slice(0, 30);
+          if (!items.length) { articleList.innerHTML = '<p class="tree-empty">// 暂无文章</p>'; return; }
+          // 分组：年 → 月 → 文章
+          const tree = {};
+          for (const item of items) {
             const title = item.querySelector("title")?.textContent ?? "";
-            const link = (item.querySelector("link")?.textContent ?? "#").replace("http://127.0.0.1:9100","https://blog.roybase.top").replace("https://www.roybase.top/index.php/archives/","https://blog.roybase.top/index.php/archives/");
+            const link = (item.querySelector("link")?.textContent ?? "#").replace("http://127.0.0.1:9100","https://blog.roybase.top");
             const dateStr = item.querySelector("pubDate")?.textContent ?? "";
-            const desc = (item.querySelector("description")?.textContent ?? "").replace(/<[^>]*>/g,"").slice(0,120);
             const d = dateStr ? new Date(dateStr) : null;
-            const dateFmt = d ? d.toISOString().slice(0,10) : "";
-            return `<a class="card article-card" href="${esc(link)}" target="_blank" rel="noopener">
-              <h4>${esc(title)}</h4>
-              <span class="article-date mono">${dateFmt}</span>
-              <p>${esc(desc)}</p>
-            </a>`;
+            const y = d ? String(d.getFullYear()) : "未知";
+            const m = d ? pad2(d.getMonth() + 1) : "00";
+            const dm = d ? `${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}` : "";
+            (tree[y] ??= {})[m] ??= [];
+            tree[y][m].push({ title, link, dm });
+          }
+          const yearKeys = Object.keys(tree).sort().reverse();
+          articleList.innerHTML = yearKeys.map((y) => {
+            const monthKeys = Object.keys(tree[y]).sort().reverse();
+            return `<details class="tree-node" open><summary class="tree-branch">📁 ${esc(y)}</summary>
+              <div class="tree-children">${monthKeys.map((m) => `
+                <details class="tree-node" open><summary class="tree-branch">📁 ${esc(m)}</summary>
+                  <div class="tree-children">${tree[y][m].map((a) => `
+                    <a class="tree-leaf" href="${esc(a.link)}" target="_blank" rel="noopener">📄 ${esc(a.title)}<span class="tree-date">${a.dm}</span></a>
+                  `).join("")}</div>
+                </details>`).join("")}
+              </div>
+            </details>`;
           }).join("");
         })
-        .catch(() => {
-          articleList.innerHTML = "<p style=\"opacity:0.5;font-family:var(--mono)\">// 文章列表不可达</p>";
-        });
+        .catch(() => { articleList.innerHTML = '<p class="tree-empty">// 文章列表不可达</p>'; });
     loadArticles();
+  }
+  // 7b. 收藏文章：静态数据 → 文件树（分类→链接，<details> 原生折叠）
+  const bookmarkTree = document.getElementById("bookmark-tree");
+  if (bookmarkTree) {
+    const BOOKMARKS = [
+      { group: "编程与数据库", links: [
+        { name: "Python 教程", url: "https://www.w3school.com.cn/python/index.asp", note: "w3school" },
+        { name: "SQL 简介", url: "https://www.runoob.com/sql/sql-intro.html", note: "菜鸟教程" },
+        { name: "Codewars", url: "https://www.codewars.com/", note: "算法刷题" },
+        { name: "简单教程，简单编程", url: "https://www.twle.cn/", note: "编程入门" },
+        { name: "自学SQL网", url: "https://xuesql.cn/", note: "教程+练习" },
+      ]},
+      { group: "AI 与人工智能", links: [
+        { name: "AI 工具集 ai-bot.cn", url: "https://ai-bot.cn/", note: "AI 导航" },
+        { name: "魔搭社区 ModelScope", url: "https://www.modelscope.cn/home", note: "模型社区" },
+        { name: "通义千问", url: "https://tongyi.aliyun.com/", note: "对话" },
+        { name: "awesome-chatgpt-prompts", url: "https://github.com/f/awesome-chatgpt-prompts", note: "GitHub" },
+      ]},
+      { group: "技术社区", links: [
+        { name: "博客园", url: "https://www.cnblogs.com/", note: "技术博客" },
+        { name: "稀土掘金", url: "https://juejin.cn/", note: "技术社区" },
+        { name: "大侠阿木", url: "https://daxiaamu.com/", note: "个人博客" },
+      ]},
+      { group: "GitHub 项目", links: [
+        { name: "30-Days-Of-Python", url: "https://github.com/Asabeneh/30-Days-Of-Python", note: "Python 入门" },
+        { name: "RustScan", url: "https://github.com/bee-san/RustScan", note: "端口扫描" },
+        { name: "Gitee", url: "https://gitee.com/", note: "代码托管" },
+      ]},
+      { group: "RSS 新闻", links: [
+        { name: "阮一峰 · 科技爱好者周刊", url: "https://www.ruanyifeng.com/blog/weekly/index.html", note: "周刊 RSS" },
+        { name: "少数派 Sspai", url: "https://sspai.com/", note: "数字生活 RSS" },
+        { name: "酷壳 CoolShell", url: "https://coolshell.cn/", note: "技术博客 RSS" },
+        { name: "InfoQ 中文", url: "https://www.infoq.cn/", note: "技术资讯 RSS" },
+        { name: "开源中国", url: "https://www.oschina.net/", note: "开源社区 RSS" },
+        { name: "Hacker News", url: "https://news.ycombinator.com/", note: "极客新闻" },
+      ]},
+      { group: "影视与娱乐", links: [
+        { name: "哔哩哔哩", url: "https://www.bilibili.com/", note: "视频" },
+        { name: "HDArea", url: "https://www.hdarea.co/", note: "PT 站" },
+        { name: "百川PT", url: "https://www.hitpt.com/", note: "PT 站" },
+      ]},
+      { group: "NAS 与存储", links: [
+        { name: "GXNAS 博客", url: "https://wp.gxnas.com/", note: "群晖教程" },
+        { name: "群晖 ssh 命令清单大全", url: "https://zhuanlan.zhihu.com/p/459751737", note: "命令速查" },
+      ]},
+    ];
+    const esc = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    bookmarkTree.innerHTML = BOOKMARKS.map((g) => `
+      <details class="tree-node" open><summary class="tree-branch">📁 ${esc(g.group)}</summary>
+        <div class="tree-children">${g.links.map((l) => `
+          <a class="tree-leaf" href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.name)}<span class="tree-note">${esc(l.note)}</span></a>
+        `).join("")}</div>
+      </details>`).join("");
   }
   // 8. 分类切换：一次只展示一个内容视图，切换时重新触发入场动画。
   const sections = [...document.querySelectorAll(".collapsible-section")];
