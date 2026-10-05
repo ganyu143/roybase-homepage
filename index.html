@@ -3,18 +3,58 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>roybase · 个人主页</title>
-  <meta name="description" content="roy 的个人主页：自托管服务、工具导航、日志与收藏">
-  <meta property="og:title" content="roybase · 个人主页">
-  <meta property="og:description" content="roy 的个人主页：自托管服务、工具导航、日志与收藏">
+  <title>roybase · roy 的个人主页与自托管服务导航</title>
+  <meta name="description" content="roy 的个人主页与自托管服务导航：汇总 jdcloud / aipc / nas 三台机器上的 17 个自托管服务（1Panel、SiYuan、NAS、DSH 等），附常用工具导航、折腾日志与技术收藏。">
+  <meta name="keywords" content="自托管,homelab,个人主页,导航,1Panel,SiYuan,NAS,工具导航,折腾日志">
+  <meta name="author" content="roy">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:title" content="roybase · roy 的个人主页与自托管服务导航">
+  <meta property="og:description" content="汇总三台服务器上的 17 个自托管服务、工具导航与折腾日志。">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="roybase">
+  <meta property="og:image" content="https://www.roybase.top/og-image.svg">
   <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="roybase · roy 的个人主页与自托管服务导航">
+  <meta name="twitter:description" content="汇总三台服务器上的 17 个自托管服务、工具导航与折腾日志。">
   <meta property="og:url" content="https://www.roybase.top/">
   <link rel="canonical" href="https://www.roybase.top/">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0e14'/%3E%3Cpath d='M18 22l14 10-14 10' stroke='%236ee7ff' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='36' y='42' width='12' height='6' fill='%23ffb86b'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/css/style.css?v=6">
+  <link rel="alternate" type="application/rss+xml" title="roybase 日志" href="/api/blog">
+  <link rel="preconnect" href="https://ipwho.is" crossorigin>
+  <link rel="dns-prefetch" href="https://api.open-meteo.com">
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "roy",
+    "url": "https://www.roybase.top/",
+    "description": "roy 的个人主页与自托管服务导航",
+    "sameAs": [
+      "https://blog.roybase.top/"
+    ]
+  }
+  </script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "roybase",
+    "alternateName": "roy 的个人主页",
+    "url": "https://www.roybase.top/",
+    "inLanguage": "zh-CN",
+    "description": "roy 的个人主页：自托管服务、工具导航、日志与收藏"
+  }
+  </script>
+  <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0e14'/%3E%3Cpath d='M18 22l14 10-14 10' stroke='%236ee7ff' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='36' y='42' width='12' height='6' fill='%23ffb86b'/%3E%3C/svg%3E" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/favicon.ico">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0e14">
+  <link rel="stylesheet" href="/css/style.css?v=10">
 </head>
 <body>
+<a href="#main-content" class="sr-only sr-only-focusable">跳转到主要内容</a>
+
 
   <!-- 左导航挂件：终端风格装饰条 -->
   <nav id="sidebar">
@@ -38,6 +78,7 @@
   <nav id="topnav">
     <div class="nav-inner">
       <span class="brand"><b>roy</b>@roybase:~$</span>
+      <button class="theme-toggle" id="theme-toggle" title="切换主题" aria-label="切换主题">🌙</button>
       <div class="nav-links">
         <a href="#hero">首页</a>
         <a href="#services">服务</a>
@@ -49,10 +90,10 @@
     </div>
   </nav>
 
-  <main class="container">
+  <main class="container" id="main-content">
     <!-- 首屏：终端风介绍 + 时钟 + 天气 -->
     <section id="hero">
-      <h1 class="sr-only">roybase · roy 的个人主页</h1>
+      <h1>roybase · roy 的个人主页与自托管服务导航</h1>
       <div class="terminal reveal in">
         <div class="terminal-bar">
           <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
@@ -61,7 +102,7 @@
         <div class="terminal-body">
           <div class="hero-copy">
             <p class="prompt-line">
-              <span class="prompt">roy@roybase:~$</span> <span id="typewriter"></span><span class="cursor" id="cursor"></span>
+              <span class="prompt">roy@roybase:~$</span> <span id="typewriter">echo "你好，我是 roy —— 把能自托管的都自托管了"</span><span class="cursor" id="cursor"></span>
             </p>
             <p class="random-dialogue" id="random-dialogue" aria-live="polite">// 正在连接 roybase…</p>
           </div>
@@ -85,11 +126,10 @@
       </div>
     </section>
 
-    <!-- 服务枢纽：4 组 17 卡片 -->
+    <!-- 服务枢纽：5 组 16 卡片 -->
     <section id="services" class="collapsible-section">
-      <button class="section-toggle" aria-expanded="false" aria-controls="services-content">
+      <button class="section-toggle" aria-expanded="false" aria-controls="services-content" aria-label="服务枢纽">
         <div class="section-head">
-          <span class="eyebrow">Self-hosted</span>
           <h2>服务枢纽</h2>
           <p class="section-sub">jdcloud + aipc + nas 三台机器上的自托管服务，状态灯每 5 分钟刷新</p>
         </div>
@@ -155,6 +195,17 @@
           </div>
 
           <div class="service-group reveal">
+            <h3>Model Monitor · aipc</h3>
+            <div class="service-grid">
+              <a class="card service-card" href="https://ai.roybase.com" target="_blank" rel="noopener" data-key="ai-mon">
+                <span class="status-dot"></span><h4>模型监控</h4>
+                <p>Strata + ninfer 只读面板</p>
+                <span class="svc-url">https://ai.roybase.com</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="service-group reveal">
             <h3>AI Tools</h3>
             <div class="service-grid">
               <a class="card service-card" href="https://dsh.roybase.top" target="_blank" rel="noopener" data-key="dsh">
@@ -195,16 +246,15 @@
               </a>
             </div>
           </div>
-          <p class="status-unknown-note" id="status-note" hidden></p>
+          <p class="status-note" id="status-note" hidden></p>
         </div>
       </div>
     </section>
 
     <!-- 导航工具 -->
     <section id="tools" class="collapsible-section">
-      <button class="section-toggle" aria-expanded="false" aria-controls="tools-content">
+      <button class="section-toggle" aria-expanded="false" aria-controls="tools-content" aria-label="导航工具">
         <div class="section-head">
-          <span class="eyebrow">Toolbox</span>
           <h2>导航工具</h2>
           <p class="section-sub">常用的公开工具与搜索入口</p>
         </div>
@@ -227,16 +277,15 @@
 
     <!-- 日志文章 -->
     <section id="articles" class="collapsible-section">
-      <button class="section-toggle" aria-expanded="false" aria-controls="articles-content">
+      <button class="section-toggle" aria-expanded="false" aria-controls="articles-content" aria-label="日志文章">
         <div class="section-head">
-          <span class="eyebrow">Log</span>
           <h2>日志文章</h2>
           <p class="section-sub">折腾记录与思考</p>
         </div>
         <span class="toggle-icon" aria-hidden="true">▶</span>
       </button>
       <div id="articles-content" class="section-content" hidden>
-        <div id="article-list" class="article-tree reveal">
+        <div id="article-list" class="article-tree reveal" role="list" aria-label="文章列表">
           <!-- 文章树由 JS 从 /api/blog RSS feed 动态渲染（年→月→文章） -->
         </div>
       </div>
@@ -244,16 +293,15 @@
 
     <!-- 收藏文章 -->
     <section id="bookmarks" class="collapsible-section">
-      <button class="section-toggle" aria-expanded="false" aria-controls="bookmarks-content">
+      <button class="section-toggle" aria-expanded="false" aria-controls="bookmarks-content" aria-label="收藏文章">
         <div class="section-head">
-          <span class="eyebrow">Bookmarks</span>
           <h2>收藏文章</h2>
           <p class="section-sub">从书签里挑出来的，值得反复看的东西</p>
         </div>
         <span class="toggle-icon" aria-hidden="true">▶</span>
       </button>
       <div id="bookmarks-content" class="section-content" hidden>
-        <div id="bookmark-tree" class="bookmark-tree reveal">
+        <div id="bookmark-tree" class="bookmark-tree reveal" role="list" aria-label="收藏文章列表">
           <!-- 收藏树由 JS 从内置 BOOKMARKS 数据渲染（分类→链接） -->
         </div>
       </div>
@@ -261,9 +309,8 @@
 
     <!-- 统计信息 -->
     <section id="stats" class="collapsible-section">
-      <button class="section-toggle" aria-expanded="false" aria-controls="stats-content">
+      <button class="section-toggle" aria-expanded="false" aria-controls="stats-content" aria-label="统计信息">
         <div class="section-head">
-          <span class="eyebrow">Metrics</span>
           <h2>统计信息</h2>
           <p class="section-sub">jdcloud 服务器实时状态与访问计数</p>
         </div>
@@ -308,9 +355,18 @@
 
   <footer>
     <p><a href="https://beian.miit.gov.cn" target="_blank" rel="noopener">鄂ICP备2022014360号</a></p>
-    <p class="mono">© 2026 roy · <a href="https://www.roybase.top" style="color:inherit;">www.roybase.top</a> · 博客后台：<a href="https://blog.roybase.top/admin/" target="_blank" rel="noopener" style="color:inherit;">blog.roybase.top/admin</a></p>
+    <p class="mono">© 2026 roy · <a href="https://www.roybase.top" style="color:inherit;">www.roybase.top</a> · <a href="https://blog.roybase.top/" target="_blank" rel="noopener" style="color:inherit;">博客</a> · <a href="https://admin.roybase.top/" target="_blank" rel="noopener" style="color:inherit;">后台</a></p>
   </footer>
 
-  <script type="module" src="/js/main.js?v=7"></script>
+  <script>
+    // Theme initialization
+    (function() {
+      const saved = localStorage.getItem('roybase-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
+    <script type="module" src="/js/main.js?v=10"></script>
 </body>
 </html>
