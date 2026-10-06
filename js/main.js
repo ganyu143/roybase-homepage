@@ -126,17 +126,54 @@ if (typeof document !== "undefined") {
     const [yi,ji] = notes[dayOfYear % notes.length];
     if (huangli) huangli.textContent = `宜：${yi}　忌：${ji}`;
   }
-  // 3. 打字机
+  // 3. 打字机：多条命令式文案轮换（打字 → 停留 → 退格 → 下一条）
   const tw = document.getElementById("typewriter");
   if (tw) {
-    const full = 'echo "你好，我是 roy —— 把能自托管的都自托管了"';
-    let i = 0;
-    const step = () => {
-      i += 1;
-      tw.textContent = typewriterText(full, i).at(-1);
-      if (i < full.length) setTimeout(step, 80);
-    };
-    setTimeout(step, 400);
+    const LINES = [
+      'echo "你好，我是 roy —— 把能自托管的都自托管了"',
+      "uptime -p   # 服务器和我都还在",
+      "ls -1 /opt/1panel/apps   # 一屏就是全部家当",
+      'git commit -m "备份是写给未来自己的一封情书"',
+      "systemctl is-active --quiet 1panel-core && echo 稳",
+      'docker ps --format "{{.Names}}"   # 都在跑',
+      'echo "可控，也因为好玩"',
+    ];
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      tw.textContent = LINES[0];
+    } else {
+      const whenVisible = (fn) => {
+        if (!document.hidden) return fn();
+        const once = () => { if (!document.hidden) { document.removeEventListener("visibilitychange", once); fn(); } };
+        document.addEventListener("visibilitychange", once);
+      };
+      const write = (chars, done) => {
+        let i = 0;
+        const tick = () => {
+          i += 1;
+          tw.textContent = chars.slice(0, i).join("");
+          if (i < chars.length) setTimeout(tick, 45 + Math.random() * 95);
+          else setTimeout(done, 4200);
+        };
+        tick();
+      };
+      const erase = (chars, done) => {
+        let i = chars.length;
+        const tick = () => {
+          i -= 2;
+          tw.textContent = chars.slice(0, Math.max(0, i)).join("");
+          if (i > 0) setTimeout(tick, 20);
+          else done();
+        };
+        tick();
+      };
+      let idx = 0;
+      const cycle = () => whenVisible(() => {
+        const chars = Array.from(LINES[idx]);
+        write(chars, () => erase(chars, () => { idx = (idx + 1) % LINES.length; setTimeout(cycle, 260); }));
+      });
+      setTimeout(cycle, 400);
+    }
   }
 
   // 4. 天气
@@ -290,7 +327,7 @@ if (typeof document !== "undefined") {
         { name: "AI 工具集 ai-bot.cn", url: "https://ai-bot.cn/", note: "AI 导航" },
         { name: "魔搭社区 ModelScope", url: "https://www.modelscope.cn/home", note: "模型社区" },
         { name: "通义千问", url: "https://tongyi.aliyun.com/", note: "对话" },
-        { name: "awesome-chatgpt-prompts", url: "https://github.com/f/awesome-chatgpt-prompts", note: "GitHub" },
+        { name: "prompts.chat", url: "https://github.com/f/prompts.chat", note: "提示词库 · 原 awesome-chatgpt-prompts" },
       ]},
       { group: "技术社区", links: [
         { name: "博客园", url: "https://www.cnblogs.com/", note: "技术博客" },
@@ -301,6 +338,39 @@ if (typeof document !== "undefined") {
         { name: "30-Days-Of-Python", url: "https://github.com/Asabeneh/30-Days-Of-Python", note: "Python 入门" },
         { name: "RustScan", url: "https://github.com/bee-san/RustScan", note: "端口扫描" },
         { name: "Gitee", url: "https://gitee.com/", note: "代码托管" },
+      ]},
+      { group: "自托管与家庭实验室", links: [
+        { name: "Awesome Selfhosted", url: "https://github.com/awesome-selfhosted/awesome-selfhosted", note: "自托管总清单" },
+        { name: "Self-Hosting Guide", url: "https://github.com/mikeroyal/Self-Hosting-Guide", note: "入门手册" },
+        { name: "Deploy Your Own SaaS", url: "https://github.com/Atarity/deploy-your-own-saas", note: "自建替代 SaaS" },
+        { name: "awesome-homelab", url: "https://github.com/AwesomeHomelab/awesome-homelab", note: "家庭实验室应用" },
+        { name: "Homer", url: "https://github.com/bastienwirtz/homer", note: "静态主页仪表盘" },
+        { name: "Glance", url: "https://github.com/glanceapp/glance", note: "信息聚合仪表盘" },
+        { name: "dashboard-icons", url: "https://github.com/homarr-labs/dashboard-icons", note: "仪表盘图标库" },
+      ]},
+      { group: "书签与阅读", links: [
+        { name: "Karakeep", url: "https://github.com/karakeep-app/karakeep", note: "收藏一切（链接/笔记/图片）" },
+        { name: "linkding", url: "https://github.com/sissbruecker/linkding", note: "极简书签管理" },
+        { name: "ArchiveBox", url: "https://github.com/ArchiveBox/ArchiveBox", note: "网页存档" },
+        { name: "FreshRSS", url: "https://github.com/FreshRSS/FreshRSS", note: "自建阅读器" },
+        { name: "Miniflux", url: "https://github.com/miniflux/v2", note: "极简 RSS" },
+        { name: "changedetection.io", url: "https://github.com/dgtlmoon/changedetection.io", note: "网页变更监测" },
+      ]},
+      { group: "本地模型与 AI", links: [
+        { name: "Ollama", url: "https://github.com/ollama/ollama", note: "本地模型运行" },
+        { name: "llama.cpp", url: "https://github.com/ggml-org/llama.cpp", note: "C/C++ 推理" },
+        { name: "Open WebUI", url: "https://github.com/open-webui/open-webui", note: "自建 AI 界面" },
+        { name: "LobeHub", url: "https://github.com/lobehub/lobehub", note: "原 lobe-chat" },
+        { name: "llamafile", url: "https://github.com/mozilla-ai/llamafile", note: "单文件跑 LLM" },
+        { name: "awesome-local-llm", url: "https://github.com/rafska/awesome-local-llm", note: "本地模型清单" },
+      ]},
+      { group: "备份与监控", links: [
+        { name: "restic", url: "https://github.com/restic/restic", note: "增量备份" },
+        { name: "Syncthing", url: "https://github.com/syncthing/syncthing", note: "点对点同步" },
+        { name: "Uptime Kuma", url: "https://github.com/louislam/uptime-kuma", note: "服务监控" },
+        { name: "Gatus", url: "https://github.com/TwiN/gatus", note: "状态页" },
+        { name: "Glances", url: "https://github.com/nicolargo/glances", note: "系统总览" },
+        { name: "zerobyte", url: "https://github.com/nicotsx/zerobyte", note: "restic 备份自动化" },
       ]},
       { group: "RSS 新闻", links: [
         { name: "阮一峰 · 科技爱好者周刊", url: "https://www.ruanyifeng.com/blog/weekly/index.html", note: "周刊 RSS" },

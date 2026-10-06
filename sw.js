@@ -1,9 +1,9 @@
 // roybase service worker — 网络优先：改了样式/脚本立即生效，离线才回退缓存
-const CACHE_NAME = 'roybase-v2';
+const CACHE_NAME = 'roybase-v3';
 const PRECACHE_URLS = [
   '/',
-  '/css/style.css?v=11',
-  '/js/main.js?v=11',
+  '/css/style.css?v=12',
+  '/js/main.js?v=12',
   '/data/status.json',
   '/data/stats.json'
 ];
