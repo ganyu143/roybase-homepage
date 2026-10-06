@@ -5,7 +5,8 @@
   --accent-warm:#ffb86b; --accent-warm-dim:rgba(255,184,107,.12);
   --text:#e6edf3; --text-dim:#8b98a9; --text-muted:#6b7a8c;
   --border:#1e2a3a; --border-light:rgba(110,231,255,.16); --border-accent:rgba(110,231,255,.4);
-  --shadow-sm:0 8px 16px rgba(0,0,0,.3); --shadow-md:var(--shadow-md); --shadow-lg:var(--shadow-lg);
+  --shadow-sm:0 8px 16px rgba(0,0,0,.3); --shadow-md:0 12px 28px rgba(0,0,0,.35); --shadow-lg:0 18px 44px rgba(0,0,0,.42);
+  color-scheme:dark;
   --mono:ui-monospace,"SF Mono","JetBrains Mono",Consolas,monospace;
   --sans:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
   --radius:12px; --maxw:1180px;
@@ -127,6 +128,11 @@ footer{margin-top:54px;padding:28px 20px 46px;border-top:1px solid var(--border)
   --bg:#f5f7fa; --bg-card:#ffffff; --bg-elevated:#e8ecf1;
   --text:#1a1e26; --text-dim:#5a6b7d; --text-muted:#8a98a9;
   --border:#d1d5db; --border-light:rgba(110,231,255,.25); --border-accent:rgba(110,231,255,.5);
+  --accent:#0a7396; --accent-dim:rgba(10,115,150,.12); --accent-hover:rgba(10,115,150,.22);
+  --accent-warm:#b45309; --accent-warm-dim:rgba(180,83,9,.12);
+  --text-muted:#64707d;
+  --shadow-sm:0 8px 16px rgba(16,24,40,.08); --shadow-md:0 12px 28px rgba(16,24,40,.10); --shadow-lg:0 18px 44px rgba(16,24,40,.12);
+  color-scheme:light;
 }
 [data-theme="light"] body {
   background-image:linear-gradient(rgba(30,42,58,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(30,42,58,.04) 1px,transparent 1px);
@@ -151,6 +157,15 @@ footer{margin-top:54px;padding:28px 20px 46px;border-top:1px solid var(--border)
   background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(245,247,250,.96));
   border-color:rgba(0,0,0,.08);
 }
+/* 特异性修正：#hero .terminal(110) 原本压过 [data-theme=light] .terminal(20)，浅色下首屏终端整块仍是深色、正文深字落在深底上不可读 */
+[data-theme="light"] #hero .terminal {
+  background:linear-gradient(145deg,#ffffff,#f2f5f8);
+  border-color:rgba(0,0,0,.08);
+  box-shadow:var(--shadow-lg);
+}
+[data-theme="light"] #hero .terminal-body { color:var(--text); }
+[data-theme="light"] #hero .prompt-line { color:var(--text); }
+[data-theme="light"] #hero .terminal-bar { background:rgba(230,235,240,.92); }
 [data-theme="light"] .terminal-bar {
   background:rgba(230,235,240,.82);
   border-bottom-color:rgba(0,0,0,.06);
@@ -185,51 +200,17 @@ footer{margin-top:54px;padding:28px 20px 46px;border-top:1px solid var(--border)
 @media (max-width:900px) { .stats-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 
 
-[data-theme="light"] {
-  --bg:#f5f7fa; --bg-card:#ffffff; --bg-elevated:#e8ecf1;
-  --text:#1a1e26; --text-dim:#5a6b7d; --text-muted:#8a98a9;
-  --border:#d1d5db; --border-light:rgba(110,231,255,.25); --border-accent:rgba(110,231,255,.5);
-}
-[data-theme="light"] body {
-  background-image:linear-gradient(rgba(30,42,58,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(30,42,58,.04) 1px,transparent 1px);
-  background-size:48px 48px;
-}
-[data-theme="light"] body::before {
-  background:radial-gradient(circle at 50% 0%,rgba(110,231,255,.06),transparent 42%),rgba(245,247,250,.84);
-}
-[data-theme="light"] #topnav {
-  background:rgba(255,255,255,.9);
-  border-bottom-color:rgba(0,0,0,.08);
-}
-[data-theme="light"] .card {
-  background:rgba(255,255,255,.85);
-  border-color:rgba(0,0,0,.08);
-}
-[data-theme="light"] .card:hover {
-  border-color:var(--accent);
-  box-shadow:0 8px 24px rgba(0,0,0,.08);
-}
-[data-theme="light"] .terminal {
-  background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(245,247,250,.96));
-  border-color:rgba(0,0,0,.08);
-}
-[data-theme="light"] .terminal-bar {
-  background:rgba(230,235,240,.82);
-  border-bottom-color:rgba(0,0,0,.06);
-}
-[data-theme="light"] .status-dot.up {
-  box-shadow:0 0 8px rgba(110,231,255,.4),0 0 16px rgba(110,231,255,.2);
-}
-[data-theme="light"] footer {
-  border-top-color:rgba(0,0,0,.06);
-}
-@media (max-width:768px) and (min-width:701px) {
-  .service-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  #hero .hero-cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  #hero #weather-card { grid-column:1 / -1; }
-  .link-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-}
+/* light 主题补齐：此前硬编码深色的组件 + 强调色对比度已在变量里换好 */
+[data-theme="light"] .collapsible-section { background:rgba(255,255,255,.72); border-color:rgba(0,0,0,.08); }
+[data-theme="light"] .collapsible-section.is-active { box-shadow:var(--shadow-md); }
+[data-theme="light"] .link-row { background:rgba(30,42,58,.04); }
+[data-theme="light"] .link-row:hover { background:var(--accent-dim); border-color:rgba(0,0,0,.08); }
+[data-theme="light"] #hero .terminal { border-color:rgba(0,0,0,.08); }
+[data-theme="light"] #hero .hero-cards .card { background:#ffffff; border-color:rgba(0,0,0,.08); }
+[data-theme="light"] .tree-node > summary.tree-branch:hover { background:rgba(30,42,58,.06); }
+[data-theme="light"] .status-dot.down { box-shadow:0 0 8px rgba(193,57,50,.35); }
+[data-theme="light"] .random-dialogue { opacity:.9; }
+
 @media (max-width:700px) { #hero .hero-cards { grid-template-columns:repeat(2,minmax(0,1fr)); } #hero #weather-card { grid-column:1 / -1; } .stats-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:430px) { #hero .hero-cards { grid-template-columns:1fr; } #hero #weather-card { grid-column:auto; } }
 

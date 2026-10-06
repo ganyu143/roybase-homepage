@@ -49,8 +49,20 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0e14'/%3E%3Cpath d='M18 22l14 10-14 10' stroke='%236ee7ff' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Crect x='36' y='42' width='12' height='6' fill='%23ffb86b'/%3E%3C/svg%3E" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/favicon.ico">
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#0a0e14">
-  <link rel="stylesheet" href="/css/style.css?v=10">
+  <meta name="theme-color" id="meta-theme-color" content="#0a0e14">
+  <script>
+    // 主题初始化：在样式表之前定下 data-theme，避免浅色用户先闪一屏深色
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('roybase-theme'); } catch (e) {}
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+      var meta = document.getElementById('meta-theme-color');
+      if (meta) meta.setAttribute('content', theme === 'dark' ? '#0a0e14' : '#f5f7fa');
+    })();
+  </script>
+  <link rel="stylesheet" href="/css/style.css?v=11">
 </head>
 <body>
 <a href="#main-content" class="sr-only sr-only-focusable">跳转到主要内容</a>
@@ -358,15 +370,6 @@
     <p class="mono">© 2026 roy · <a href="https://www.roybase.top" style="color:inherit;">www.roybase.top</a> · <a href="https://blog.roybase.top/" target="_blank" rel="noopener" style="color:inherit;">博客</a> · <a href="https://admin.roybase.top/" target="_blank" rel="noopener" style="color:inherit;">后台</a></p>
   </footer>
 
-  <script>
-    // Theme initialization
-    (function() {
-      const saved = localStorage.getItem('roybase-theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = saved || (prefersDark ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
-    })();
-    </script>
-    <script type="module" src="/js/main.js?v=10"></script>
+  <script type="module" src="/js/main.js?v=11"></script>
 </body>
 </html>

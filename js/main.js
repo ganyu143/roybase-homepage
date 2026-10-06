@@ -28,6 +28,15 @@ export function parseStatus(obj) {
 // 浏览器端
 if (typeof document !== "undefined") {
 
+
+  // Offline detection
+  const offlineBadge = document.createElement("div");
+  offlineBadge.className = "offline-badge";
+  offlineBadge.textContent = "⚠ 离线模式";
+  offlineBadge.hidden = true;
+  document.body.appendChild(offlineBadge);
+  window.addEventListener("offline", () => { offlineBadge.hidden = false; });
+  window.addEventListener("online", () => { offlineBadge.hidden = true; });
   // 1. 时钟
   const clock = document.getElementById("clock");
   if (clock) {
@@ -76,14 +85,16 @@ if (typeof document !== "undefined") {
       let next;
       do next = Math.floor(Math.random() * lines.length); while (next === last);
       last = next;
-      dialogue.classList.remove("dialogue-in");
+      if (dialogue.classList.contains("dialogue-in")) dialogue.classList.remove("dialogue-in");
       requestAnimationFrame(() => {
         dialogue.textContent = lines[next];
         dialogue.classList.add("dialogue-in");
       });
     };
     rotateDialogue();
-    setInterval(rotateDialogue, 5200);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches === false) {
+      setInterval(rotateDialogue, 5200);
+    }
   }
   // 2b. 公历、农历与轻量皇历提示（浏览器原生 Intl，无外部依赖）。
   const calendar = document.getElementById("calendar");
@@ -139,12 +150,14 @@ if (typeof document !== "undefined") {
         const c = j.current;
         weather.textContent = formatWeather({ temp: c.temperature_2m, code: c.weather_code });
       })
-      .catch(() => weatherCard && weatherCard.remove());
+      .catch(() => { if (weather) weather.textContent = "--°C"; });
   }
 
   // 5. 服务状态灯
   const statusNote = document.getElementById("status-note");
-  const loadStatus = () =>
+  const loadStatus = () => {
+    // Set loading state
+    for (const dot of document.querySelectorAll(".status-dot")) dot.classList.add("loading");
     fetch("/data/status.json")
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((s) => {
@@ -163,8 +176,11 @@ if (typeof document !== "undefined") {
           statusNote.textContent = "// 状态未知：status.json 不可达";
         }
       });
+  };
   loadStatus();
-  setInterval(loadStatus, 5 * 60 * 1000);
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches === false) {
+    setInterval(loadStatus, 5 * 60 * 1000);
+  }
 
   // 6. 统计信息
   const statUptime = document.getElementById("stat-uptime");
@@ -178,14 +194,14 @@ if (typeof document !== "undefined") {
         statLoad.textContent   = s.load;
         statMem.textContent    = `${s.mem_pct}%`;
       })
-      .catch(() => {});
+      .catch(() => { if (statUptime) statUptime.textContent = "--"; if (statLoad) statLoad.textContent = "--"; if (statMem) statMem.textContent = "--%"; });
   }
   const statVisits = document.getElementById("stat-visits");
   if (statVisits) {
     fetch("/api/visits")
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((v) => (statVisits.textContent = v.visits))
-      .catch(() => statVisits.closest(".stat-card").remove());
+      .catch(() => { if (statVisits) statVisits.textContent = "--"; });
   }
 
   // 6b. 访客信息：IP 由同源 Nginx 脱敏，地域由 ipwho.is（CORS 开放）解析，浏览器信息在本地读取。
@@ -201,7 +217,7 @@ if (typeof document !== "undefined") {
     // 地域：ipwho.is 免费无 key、CORS 开放；失败时显示“未知”不隐藏卡片
     if (visitorRegion) {
       visitorRegion.textContent = "解析中…";
-      fetch("https://ipwho.is/")
+      const fetchRegion = () => fetch("https://ipwho.is/", { signal: AbortSignal.timeout(5000) })
         .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
         .then((v) => {
           if (!v.success) throw new Error("ipwho");
@@ -209,6 +225,7 @@ if (typeof document !== "undefined") {
           visitorRegion.textContent = [v.city, country].filter(Boolean).join(" · ") || "未知";
         })
         .catch(() => { visitorRegion.textContent = "未知"; });
+      fetchRegion();
     }
     const ua = navigator.userAgent;
     const browser = /Edg\//.test(ua) ? "Edge" : /Chrome\//.test(ua) ? "Chrome" : /Firefox\//.test(ua) ? "Firefox" : /Safari\//.test(ua) ? "Safari" : "Browser";
@@ -364,13 +381,43 @@ if (typeof document !== "undefined") {
           }
         }
       },
-      { threshold: 0.12 }
+      { threshold: 0.08, rootMargin: "0px 0px -20px 0px" }
     );
-    els.forEach((el) => io.observe(el));
+    els.forEach((el, i) => {
+      el.style.transitionDelay = Math.min(i * 40, 200) + "ms";
+      io.observe(el);
+    });
   } else {
     els.forEach((el) => el.classList.add("in"));
   }
 
+
+  // Theme toggle：支持多个按钮、同步 meta theme-color、未手动选过时跟随系统
+  const THEME_COLORS = { dark: "#0a0e14", light: "#f5f7fa" };
+  const themeButtons = Array.from(document.querySelectorAll(".theme-toggle"));
+  const readSavedTheme = () => { try { return localStorage.getItem("roybase-theme"); } catch (e) { return null; } };
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.style.colorScheme = theme;
+    themeButtons.forEach((btn) => {
+      btn.textContent = theme === "dark" ? "🌙" : "☀️";
+      btn.setAttribute("aria-pressed", theme === "light" ? "true" : "false");
+      btn.setAttribute("title", theme === "dark" ? "当前深色，点击切到浅色" : "当前浅色，点击切到深色");
+    });
+    const meta = document.getElementById("meta-theme-color");
+    if (meta) meta.setAttribute("content", THEME_COLORS[theme] || THEME_COLORS.dark);
+  };
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+  applyTheme(readSavedTheme() || (prefersDark.matches ? "dark" : "light"));
+  themeButtons.forEach((btn) => btn.addEventListener("click", () => {
+    const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    try { localStorage.setItem("roybase-theme", next); } catch (e) {}
+    applyTheme(next);
+  }));
+  // 用户没手动选过时，系统主题变了页面跟着变
+  const onSystemTheme = (e) => { if (readSavedTheme()) return; applyTheme(e.matches ? "dark" : "light"); };
+  if (prefersDark.addEventListener) prefersDark.addEventListener("change", onSystemTheme);
+  else if (prefersDark.addListener) prefersDark.addListener(onSystemTheme);
   // 10. 侧栏跑马灯
   const ticker = document.getElementById("ticker-inner");
   if (ticker) {
