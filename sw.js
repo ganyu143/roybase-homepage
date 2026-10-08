@@ -1,11 +1,13 @@
 // roybase service worker — 网络优先：改了样式/脚本立即生效，离线才回退缓存
-const CACHE_NAME = 'roybase-v3';
+const CACHE_NAME = 'roybase-v4';
 const PRECACHE_URLS = [
   '/',
   '/css/style.css?v=12',
   '/js/main.js?v=12',
   '/data/status.json',
-  '/data/stats.json'
+  '/data/stats.json',
+  '/favicon.ico',
+  '/manifest.json'
 ];
 
 self.addEventListener('install', event => {

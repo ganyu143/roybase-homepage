@@ -3,4 +3,8 @@ Allow: /
 Disallow: /data/
 Disallow: /scripts/
 
+# 后台与计数器接口不参与索引（/api/visits 每次访问自增计数）
+Disallow: /admin/
+Disallow: /api/visits
+
 Sitemap: https://www.roybase.top/sitemap.xml
