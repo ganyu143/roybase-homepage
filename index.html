@@ -53,18 +53,8 @@
   <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" id="meta-theme-color" content="#0a0e14">
-  <script>
-    // 主题初始化：在样式表之前定下 data-theme，避免浅色用户先闪一屏深色
-    (function () {
-      var saved = null;
-      try { saved = localStorage.getItem('roybase-theme'); } catch (e) {}
-      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
-      document.documentElement.style.colorScheme = theme;
-      var meta = document.getElementById('meta-theme-color');
-      if (meta) meta.setAttribute('content', theme === 'dark' ? '#0a0e14' : '#f5f7fa');
-    })();
-  </script>
+  <script src="/js/theme.js?v=1"></script>
+
   <link rel="stylesheet" href="/css/style.css?v=12">
 </head>
 <body>
