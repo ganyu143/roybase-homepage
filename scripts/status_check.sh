@@ -17,12 +17,13 @@ TMP="$(mktemp)"
     fi
     [ "$first" -eq 1 ] || echo ","
     first=0
-    printf '"%s":{"name":"%s","url":"%s","status":"%s"}' "$1" "$2" "$3" "$status"
+    # ping: 条目不输出 url，避免 status.json 泄露 tailnet 内网地址
+    local url="${3}"
+    [[ "$url" == ping:* ]] && url="<internal>"
+    printf '"%s":{"name":"%s","url":"%s","status":"%s"}' "$1" "$2" "$url" "$status"
   }
   check 1panel      "1Panel"        "https://1p.roybase.top"
   check term        "Web Terminal"  "https://term.roybase.top" "200,401"
-  check 1panel-aipc "1Panel (aipc)" "https://www.roybase.com"
-  check nas         "NAS"           "ping:100.88.88.2"
   check siyuan      "SiYuan"        "https://siyuan.roybase.com" "200,401"
   check itools      "IT Tools"      "https://itools.roybase.com"
   check lxc         "Linux Command" "https://lxc.roybase.com"

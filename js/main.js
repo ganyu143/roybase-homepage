@@ -199,12 +199,23 @@ if (typeof document !== "undefined") {
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((s) => {
         const m = parseStatus(s);
+        const missing = [];
         for (const card of document.querySelectorAll(".service-card[data-key]")) {
           const dot = card.querySelector(".status-dot");
           if (!dot) continue;
-          dot.className = "status-dot" + (m[card.dataset.key] === "up" ? " up" : " down");
+          const st = m[card.dataset.key];
+          if (st === "up") dot.className = "status-dot up";
+          else if (st === "down") dot.className = "status-dot down";
+          else { dot.className = "status-dot"; missing.push(card.dataset.key); } // 三态：缺键不显示假红
         }
-        if (statusNote) statusNote.hidden = true;
+        if (statusNote) {
+          if (missing.length) {
+            statusNote.hidden = false;
+            statusNote.textContent = "// 状态未知：探活键缺失 " + missing.join("、");
+          } else {
+            statusNote.hidden = true;
+          }
+        }
       })
       .catch(() => {
         for (const dot of document.querySelectorAll(".status-dot")) dot.className = "status-dot";
