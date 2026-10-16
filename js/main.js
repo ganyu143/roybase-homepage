@@ -318,91 +318,21 @@ if (typeof document !== "undefined") {
         .catch(() => { articleList.innerHTML = '<p class="tree-empty">// 文章列表不可达</p>'; });
     loadArticles();
   }
-  // 7b. 收藏文章：静态数据 → 文件树（分类→链接，<details> 原生折叠）
+  // 7b. 收藏文章：数据在 /bookmarks.json → 文件树（分类→链接，<details> 原生折叠）
+  // 改收藏只改 JSON，不必再 bump main.js 版本号（/bookmarks.json 走 max-age=0 每次回源）
   const bookmarkTree = document.getElementById("bookmark-tree");
   if (bookmarkTree) {
-    const BOOKMARKS = [
-      { group: "编程与数据库", links: [
-        { name: "Python 教程", url: "https://www.w3school.com.cn/python/index.asp", note: "w3school" },
-        { name: "SQL 简介", url: "https://www.runoob.com/sql/sql-intro.html", note: "菜鸟教程" },
-        { name: "Codewars", url: "https://www.codewars.com/", note: "算法刷题" },
-        { name: "简单教程，简单编程", url: "https://www.twle.cn/", note: "编程入门" },
-        { name: "自学SQL网", url: "https://xuesql.cn/", note: "教程+练习" },
-      ]},
-      { group: "AI 与人工智能", links: [
-        { name: "AI 工具集 ai-bot.cn", url: "https://ai-bot.cn/", note: "AI 导航" },
-        { name: "魔搭社区 ModelScope", url: "https://www.modelscope.cn/home", note: "模型社区" },
-        { name: "通义千问", url: "https://tongyi.aliyun.com/", note: "对话" },
-        { name: "prompts.chat", url: "https://github.com/f/prompts.chat", note: "提示词库 · 原 awesome-chatgpt-prompts" },
-      ]},
-      { group: "技术社区", links: [
-        { name: "博客园", url: "https://www.cnblogs.com/", note: "技术博客" },
-        { name: "稀土掘金", url: "https://juejin.cn/", note: "技术社区" },
-        { name: "大侠阿木", url: "https://daxiaamu.com/", note: "个人博客" },
-      ]},
-      { group: "GitHub 项目", links: [
-        { name: "30-Days-Of-Python", url: "https://github.com/Asabeneh/30-Days-Of-Python", note: "Python 入门" },
-        { name: "RustScan", url: "https://github.com/bee-san/RustScan", note: "端口扫描" },
-        { name: "Gitee", url: "https://gitee.com/", note: "代码托管" },
-      ]},
-      { group: "自托管与家庭实验室", links: [
-        { name: "Awesome Selfhosted", url: "https://github.com/awesome-selfhosted/awesome-selfhosted", note: "自托管总清单" },
-        { name: "Self-Hosting Guide", url: "https://github.com/mikeroyal/Self-Hosting-Guide", note: "入门手册" },
-        { name: "Deploy Your Own SaaS", url: "https://github.com/Atarity/deploy-your-own-saas", note: "自建替代 SaaS" },
-        { name: "awesome-homelab", url: "https://github.com/AwesomeHomelab/awesome-homelab", note: "家庭实验室应用" },
-        { name: "Homer", url: "https://github.com/bastienwirtz/homer", note: "静态主页仪表盘" },
-        { name: "Glance", url: "https://github.com/glanceapp/glance", note: "信息聚合仪表盘" },
-        { name: "dashboard-icons", url: "https://github.com/homarr-labs/dashboard-icons", note: "仪表盘图标库" },
-      ]},
-      { group: "书签与阅读", links: [
-        { name: "Karakeep", url: "https://github.com/karakeep-app/karakeep", note: "收藏一切（链接/笔记/图片）" },
-        { name: "linkding", url: "https://github.com/sissbruecker/linkding", note: "极简书签管理" },
-        { name: "ArchiveBox", url: "https://github.com/ArchiveBox/ArchiveBox", note: "网页存档" },
-        { name: "FreshRSS", url: "https://github.com/FreshRSS/FreshRSS", note: "自建阅读器" },
-        { name: "Miniflux", url: "https://github.com/miniflux/v2", note: "极简 RSS" },
-        { name: "changedetection.io", url: "https://github.com/dgtlmoon/changedetection.io", note: "网页变更监测" },
-      ]},
-      { group: "本地模型与 AI", links: [
-        { name: "Ollama", url: "https://github.com/ollama/ollama", note: "本地模型运行" },
-        { name: "llama.cpp", url: "https://github.com/ggml-org/llama.cpp", note: "C/C++ 推理" },
-        { name: "Open WebUI", url: "https://github.com/open-webui/open-webui", note: "自建 AI 界面" },
-        { name: "LobeHub", url: "https://github.com/lobehub/lobehub", note: "原 lobe-chat" },
-        { name: "llamafile", url: "https://github.com/mozilla-ai/llamafile", note: "单文件跑 LLM" },
-        { name: "awesome-local-llm", url: "https://github.com/rafska/awesome-local-llm", note: "本地模型清单" },
-      ]},
-      { group: "备份与监控", links: [
-        { name: "restic", url: "https://github.com/restic/restic", note: "增量备份" },
-        { name: "Syncthing", url: "https://github.com/syncthing/syncthing", note: "点对点同步" },
-        { name: "Uptime Kuma", url: "https://github.com/louislam/uptime-kuma", note: "服务监控" },
-        { name: "Gatus", url: "https://github.com/TwiN/gatus", note: "状态页" },
-        { name: "Glances", url: "https://github.com/nicolargo/glances", note: "系统总览" },
-        { name: "zerobyte", url: "https://github.com/nicotsx/zerobyte", note: "restic 备份自动化" },
-      ]},
-      { group: "RSS 新闻", links: [
-        { name: "阮一峰 · 科技爱好者周刊", url: "https://www.ruanyifeng.com/blog/weekly/index.html", note: "周刊 RSS" },
-        { name: "少数派 Sspai", url: "https://sspai.com/", note: "数字生活 RSS" },
-        { name: "酷壳 CoolShell", url: "https://coolshell.cn/", note: "技术博客 RSS" },
-        { name: "InfoQ 中文", url: "https://www.infoq.cn/", note: "技术资讯 RSS" },
-        { name: "开源中国", url: "https://www.oschina.net/", note: "开源社区 RSS" },
-        { name: "Hacker News", url: "https://news.ycombinator.com/", note: "极客新闻" },
-      ]},
-      { group: "影视与娱乐", links: [
-        { name: "哔哩哔哩", url: "https://www.bilibili.com/", note: "视频" },
-        { name: "HDArea", url: "https://www.hdarea.co/", note: "PT 站" },
-        { name: "百川PT", url: "https://www.hitpt.com/", note: "PT 站" },
-      ]},
-      { group: "NAS 与存储", links: [
-        { name: "GXNAS 博客", url: "https://wp.gxnas.com/", note: "群晖教程" },
-        { name: "群晖 ssh 命令清单大全", url: "https://zhuanlan.zhihu.com/p/459751737", note: "命令速查" },
-      ]},
-    ];
     const esc = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-    bookmarkTree.innerHTML = BOOKMARKS.map((g) => `
+    const renderBookmarks = (groups) => groups.map((g) => `
       <details class="tree-node" open><summary class="tree-branch">📁 ${esc(g.group)}</summary>
         <div class="tree-children">${g.links.map((l) => `
           <a class="tree-leaf" href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.name)}<span class="tree-note">${esc(l.note)}</span></a>
         `).join("")}</div>
       </details>`).join("");
+    fetch("/bookmarks.json")
+      .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
+      .then((groups) => { bookmarkTree.innerHTML = renderBookmarks(groups); })
+      .catch(() => { bookmarkTree.innerHTML = '<p class="tree-empty">// 收藏数据不可达</p>'; });
   }
   // 8. 分类切换：一次只展示一个内容视图，切换时重新触发入场动画。
   const sections = [...document.querySelectorAll(".collapsible-section")];
