@@ -8,3 +8,4 @@ Disallow: /admin/
 Disallow: /api/visits
 
 Sitemap: https://www.roybase.top/sitemap.xml
+Sitemap: https://blog.roybase.top/sitemap.xml
