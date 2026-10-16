@@ -252,7 +252,7 @@ if (typeof document !== "undefined") {
       .catch(() => { if (statVisits) statVisits.textContent = "--"; });
   }
 
-  // 6b. 访客信息：IP 由同源 Nginx 脱敏，地域由 ipwho.is（CORS 开放）解析，浏览器信息在本地读取。
+  // 6b. 访客信息：IP 由同源 Nginx 脱敏，地域由服务器代取（CSP 无第三方例外），浏览器信息在本地读取。
   const visitorIp = document.getElementById("visitor-ip");
   const visitorRegion = document.getElementById("visitor-region");
   const visitorBrowser = document.getElementById("visitor-browser");
@@ -260,21 +260,16 @@ if (typeof document !== "undefined") {
   if (visitorIp || visitorRegion || visitorBrowser || visitorDevice) {
     fetch("/api/visitor")
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((v) => { if (visitorIp) visitorIp.textContent = v.ip || "隐藏"; })
-      .catch(() => { if (visitorIp) visitorIp.textContent = "隐藏"; });
-    // 地域：ipwho.is 免费无 key、CORS 开放；失败时显示“未知”不隐藏卡片
-    if (visitorRegion) {
-      visitorRegion.textContent = "解析中…";
-      const fetchRegion = () => fetch("https://ipwho.is/", { signal: AbortSignal.timeout(5000) })
-        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-        .then((v) => {
-          if (!v.success) throw new Error("ipwho");
-          const country = { China: "中国", Japan: "日本", US: "美国", USA: "美国", Germany: "德国", UK: "英国", Singapore: "新加坡" }[v.country] || v.country;
-          visitorRegion.textContent = [v.city, country].filter(Boolean).join(" · ") || "未知";
-        })
-        .catch(() => { visitorRegion.textContent = "未知"; });
-      fetchRegion();
-    }
+      .then((v) => {
+        if (visitorIp) visitorIp.textContent = v.ip || "隐藏";
+        // 地域由服务器代取（CSP 无第三方例外），映射常用国家名；失败显示“未知”
+        const CN = { China: "中国", Japan: "日本", US: "美国", USA: "美国", Germany: "德国", UK: "英国", Singapore: "新加坡" };
+        if (visitorRegion) {
+          const region = [v.city, CN[v.country] || v.country].filter(Boolean).join(" · ");
+          visitorRegion.textContent = region || "未知";
+        }
+      })
+      .catch(() => { if (visitorIp) visitorIp.textContent = "隐藏"; if (visitorRegion) visitorRegion.textContent = "未知"; });
     const ua = navigator.userAgent;
     const browser = /Edg\//.test(ua) ? "Edge" : /Chrome\//.test(ua) ? "Chrome" : /Firefox\//.test(ua) ? "Firefox" : /Safari\//.test(ua) ? "Safari" : "Browser";
     const device = /Mobi|Android/i.test(ua) ? "Mobile" : "Desktop";
