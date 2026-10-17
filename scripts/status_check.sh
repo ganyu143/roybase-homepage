@@ -41,4 +41,6 @@ TMP="$(mktemp)"
   echo ""
   echo "}"
 } > "$TMP"
+chmod 644 "$TMP"
+chown 1000:1000 "$TMP" 2>/dev/null || true
 mv "$TMP" "$OUT"
