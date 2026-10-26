@@ -132,9 +132,9 @@ if (typeof document !== "undefined") {
     const LINES = [
       'echo "你好，我是 roy —— 把能自托管的都自托管了"',
       "uptime -p   # 服务器和我都还在",
-      "ls -1 /opt/1panel/apps   # 一屏就是全部家当",
+      "ls -1 /opt/nginx-data/www   # 一屏就是全部家当",
       'git commit -m "备份是写给未来自己的一封情书"',
-      "systemctl is-active --quiet 1panel-core && echo 稳",
+      "systemctl is-active --quiet nginx && echo 稳",
       'docker ps --format "{{.Names}}"   # 都在跑',
       'echo "可控，也因为好玩"',
     ];
