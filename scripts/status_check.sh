@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 服务状态检查 → status.json（部署到服务器 /opt/homepage-status/，cron 每 5 分钟）
 set -u
-OUT="${OUT:-/opt/1panel/www/sites/roybase-homepage/index/data/status.json}"
+OUT="${OUT:-/opt/nginx-data/www/sites/roybase-homepage/index/data/status.json}"
 TMP="$(mktemp)"
 {
   echo "{"
@@ -22,7 +22,7 @@ TMP="$(mktemp)"
     [[ "$url" == ping:* ]] && url="<internal>"
     printf '"%s":{"name":"%s","url":"%s","status":"%s"}' "$1" "$2" "$url" "$status"
   }
-  check 1panel      "1Panel"        "https://1p.roybase.top"
+  check acepanel    "AcePanel"      "https://1p.roybase.top/admin" "200,302"
   check term        "Web Terminal"  "https://term.roybase.top" "200,401"
   check siyuan      "SiYuan"        "https://siyuan.roybase.com" "200,401"
   check itools      "IT Tools"      "https://itools.roybase.com"
@@ -30,12 +30,14 @@ TMP="$(mktemp)"
   check apf         "FreeLLMAPI"    "https://apf.roybase.com"
   check sou         "Hermes Search" "https://sou.roybase.com"
   check ai-mon      "模型监控"      "https://ai.roybase.com/healthz"
-  check dsh         "DSH"           "https://dsh.roybase.top" "200,401"
   check lc          "llama.cpp"     "https://lc.roybase.com" "200,401"
   check hm          "Hermes Agent"  "https://hm.roybase.com" "200,302"
   check claw        "OpenClaw"      "https://claw.roybase.com" "200,403"
   check homebox     "Homebox"       "https://nas.roybase.com"
   check lucky       "Lucky"         "https://lucky.roybase.com"
+  check blog        "博客"          "https://blog.roybase.top" "200,302"
+  check rp          "远程 pi"       "https://rp.roybase.top/health"
+  check mirror      "镜像监控"      "https://mirror.roybase.top"
   echo ""
   echo "}"
 } > "$TMP"
