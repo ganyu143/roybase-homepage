@@ -23,7 +23,7 @@ TMP="$(mktemp)"
     printf '"%s":{"name":"%s","url":"%s","status":"%s"}' "$1" "$2" "$url" "$status"
   }
   check acepanel    "AcePanel"      "https://1p.roybase.top/admin" "200,302"
-  check term        "Web Terminal"  "https://term.roybase.top" "200,401"
+  check self        "个人主页"      "https://www.roybase.top" "200"
   check siyuan      "SiYuan"        "https://siyuan.roybase.com" "200,401"
   check itools      "IT Tools"      "https://itools.roybase.com"
   check lxc         "Linux Command" "https://lxc.roybase.com"
